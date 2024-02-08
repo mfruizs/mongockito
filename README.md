@@ -1,2 +1,2 @@
 # mongockito
-Java library for unit testing in NoSQL mongo
+Java library for unit testing of NoSQL mongodb
