@@ -10,7 +10,7 @@
   <packaging>jar</packaging>
 
   <name>mongockito</name>
-  <url>http://www.example.com</url>
+  <url>https://github.com/mfruizs/mongockito</url>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,6 +19,7 @@
   </properties>
 
   <dependencies>
+    <!-- test-scope dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
@@ -37,7 +38,18 @@
       <version>5.9.2</version>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
+      <version>3.24.2</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.10.0</version>
+      <scope>test</scope>
+    </dependency>
     <!-- Persistence annotations like @Entity and @Table -->
     <dependency>
       <groupId>jakarta.persistence</groupId>
@@ -46,7 +58,13 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- Extra dependencies -->
+    <!-- Project dependencies -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.10.0</version>
+      <scope>compile</scope>
+    </dependency>
     <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
@@ -72,25 +90,6 @@
       <artifactId>gson</artifactId>
       <version>2.10.1</version>
     </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>5.10.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>3.24.2</version>
-      <scope>test</scope>
-    </dependency>
-
   </dependencies>
 
   <build>
