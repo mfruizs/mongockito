@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import io.mongockito.util.config.MongockitoConfiguration;
 import java.util.Collection;
 import org.bson.Document;
 import org.mockito.ArgumentCaptor;
@@ -99,12 +100,12 @@ public enum Operation {
 		return responseDoc;
 	}
 
-	public static final String DEFAULT_KEY_ID = "_id"; // TODO configurable
+	private static final MongockitoConfiguration config = new MongockitoConfiguration();
+	public static final String DEFAULT_KEY_ID = config.getDefaultId();
 	private static final ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
 	private static final ArgumentCaptor<Update> updateCaptor = ArgumentCaptor.forClass(Update.class);
 	private static final ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 
 	public abstract Document execute(MongoTemplate mongoTemplate, Class<?> clazz, int calls);
-
 
 }

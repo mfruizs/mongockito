@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.mongockito.util.config.MongockitoConfiguration;
 import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
 import io.mongockito.util.json.adapters.ObjectIdAdapter;
 import java.time.LocalDateTime;
@@ -15,12 +16,22 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 @UtilityClass
 public class JsonTool {
 
-	public static final Gson GSON = new GsonBuilder()
-		.setFieldNamingStrategy(JsonTool::obtainFieldNaming)
-		.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-		.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter())
-		.serializeNulls() // TODO configurable
-		.create();
+	private final MongockitoConfiguration config = new MongockitoConfiguration();
+	public static final Gson GSON = gsonBuilder().create();
+
+	private GsonBuilder gsonBuilder() {
+
+		GsonBuilder gsonBuilder = new GsonBuilder()
+			.setFieldNamingStrategy(JsonTool::obtainFieldNaming)
+			.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+			.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
+
+		if (config.isSerializeNulls()) {
+			gsonBuilder.serializeNulls();
+		}
+
+		return gsonBuilder;
+	}
 
 	private static String obtainFieldNaming(final java.lang.reflect.Field f) {
 
@@ -32,5 +43,6 @@ public class JsonTool {
 		}
 		return f.getName();
 	}
+
 
 }

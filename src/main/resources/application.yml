@@ -1,4 +1,0 @@
-mongockito:
-  default-id: _id
-  json:
-    serializeNulls: true
