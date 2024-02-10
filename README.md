@@ -36,7 +36,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .addClass( EntityExample.class )
         .addValidation( ValidationType.EQUALS,   "_Id", ID_FIELD )
         .addValidation( ValidationType.EQUALS,   "boolean_field", true )
-        .addValidation( ValidationType.EQUALS,   "String_field," "name" )
+        .addValidation( ValidationType.EQUALS,   "string_field" "name" )
         .addValidation( ValidationType.NULL,     "one_field" )
         .addValidation( ValidationType.NOT_NULL, "another_field" )
         .verify();
