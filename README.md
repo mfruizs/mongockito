@@ -32,12 +32,13 @@ and will check that the attached fields have been sent to the DB as intended.
     public static final String ID_FIELD = new ObjectId().toHexString();
 
     Verify.builder()
-        .addOperation(Operation.SAVE)
-        .addClass(EntityExample.class)
-        .addValidation(ValidationType.EQUALS, "_Id", ID_FIELD)
-        .addValidation(ValidationType.EQUALS, "boolean_field", true)
-        .addValidation(ValidationType.EQUALS, "String_field," "name")
-        .addValidation(ValidationType.NOT_NULL, "another_field")
+        .addOperation( Operation.SAVE )
+        .addClass( EntityExample.class )
+        .addValidation( ValidationType.EQUALS,   "_Id", ID_FIELD )
+        .addValidation( ValidationType.EQUALS,   "boolean_field", true )
+        .addValidation( ValidationType.EQUALS,   "String_field," "name" )
+        .addValidation( ValidationType.NULL,     "one_field" )
+        .addValidation( ValidationType.NOT_NULL, "another_field" )
         .verify();
 
 ```

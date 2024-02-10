@@ -67,6 +67,29 @@ class ValidationTypeTest {
 	}
 
 	@Test
+	void should_validate_is_null_operation_correctly() {
+
+		EntityExample entityExample = EntityExample.builder().build();
+
+		Document doc = Document.parse(GSON.toJson(entityExample));
+
+		ValidationType.NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD));
+	}
+
+	@Test
+	void should_throw_error_on_validating_null_operation() {
+
+		EntityExample entityExample = EntityExample.builder()
+			.id(ID_FIELD)
+			.build();
+
+		Document doc = Document.parse(GSON.toJson(entityExample));
+
+		assertThatThrownBy(() -> ValidationType.NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD)))
+			.isInstanceOf(AssertionError.class);
+	}
+
+	@Test
 	void should_validate_map_size_operation_correctly() {
 
 		Map<String, EntityExample> exampleMap = Map.of(

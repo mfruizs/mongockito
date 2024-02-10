@@ -2,6 +2,7 @@ package io.mongockito;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
@@ -26,6 +27,15 @@ public enum ValidationType {
 
 			final Object key = pair.getKey();
 			assertNotNull(document.get(key));
+		}
+	},
+
+	NULL {
+		@Override
+		public void validate(final Document document, final Pair<?, ?> pair) {
+
+			final Object key = pair.getKey();
+			assertNull(document.get(key));
 		}
 	},
 
