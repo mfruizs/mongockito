@@ -68,22 +68,22 @@ public class Verify {
 			return this;
 		}
 
-		public <K, V> OperationBuilder addValidation(ValidationType validationType, K key, V value) {
+		public <K, V> OperationBuilder addValidation(ValidationType validationType, K fieldName, V expectedValue) {
 
-			return addValidation(validationType, Pair.of(key, value));
+			return addValidation(validationType, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K> OperationBuilder addValidationWithNullValue(ValidationType type, K key) {
+		public <K> OperationBuilder addValidation(ValidationType type, K fieldName) {
 
-			return addValidation(type, Pair.of(key, null));
+			return addValidation(type, Pair.of(fieldName, null));
 		}
 
-		private <K, V> OperationBuilder addValidation(ValidationType validationType, Pair<K, V> pair) {
+		private <K, V> OperationBuilder addValidation(ValidationType validationType, Pair<K, V> field) {
 
 			fields = Optional.ofNullable(fields).orElseGet(ArrayList::new);
 			fields.add(ValidateField.builder()
 						   .validationType(validationType)
-						   .field(pair)
+						   .field(field)
 						   .build());
 			return this;
 		}

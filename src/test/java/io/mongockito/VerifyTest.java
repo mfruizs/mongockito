@@ -42,7 +42,7 @@ class VerifyTest {
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
 			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
 			.addValidation(ValidationType.EQUALS, FIELD_MONTH, "01")
-			.addValidationWithNullValue(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
+			.addValidation(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
 			.build();
 
 		assertEquals(OPERATION_FIND_BY_ID, result.getOperation(), "Error adding operation type");
@@ -58,7 +58,7 @@ class VerifyTest {
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
 			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
 			.addValidation(ValidationType.EQUALS, FIELD_MONTH, "01")
-			.addValidationWithNullValue(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
+			.addValidation(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
 			.addValidation(ValidationType.EQUALS, FIELD_LAST_UPDATE_TIMESTAMP, DATE)
 			.build();
 

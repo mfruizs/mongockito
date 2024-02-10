@@ -11,7 +11,7 @@ we can validate that the fields sent to mongodb are the expected ones.
 
 * **Java:** 17 
 * **Spring-boot based:** 3.2.2
-> **NOTE:** There are a compile error with Java 21.
+> **NOTE:** There are a compile error with Java 21, but it's compatible with java 21 projects.
 
 ## Installation
 
@@ -29,7 +29,7 @@ we can validate that the fields sent to mongodb are the expected ones.
 * The following example will validate MongoDB save operation of a collection item defined by identifier, 
 and will check that the attached fields have been sent to the DB as intended.
 ```java
-	public static final String ID_FIELD = new ObjectId().toHexString();
+    public static final String ID_FIELD = new ObjectId().toHexString();
 
     Verify.builder()
         .addOperation(Operation.SAVE)
@@ -37,7 +37,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .addValidation(ValidationType.EQUALS, "_Id", ID_FIELD)
         .addValidation(ValidationType.EQUALS, "boolean_field", true)
         .addValidation(ValidationType.EQUALS, "String_field," "name")
-        .addValidationWithNullValue(ValidationType.NOT_NULL, "another_field")
+        .addValidation(ValidationType.NOT_NULL, "another_field")
         .verify();
 
 ```
