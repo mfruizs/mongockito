@@ -1,8 +1,8 @@
 # Mongockito
-Java library for unit testing of NoSQL mongodb
+Java library for Mongodb repository unit testing.
 
 ### Description
-Currently, there is no library that allows to build a local bd in the H2 style of mongodb.
+Currently, there is no library that allows to build a local db in the H2 style of mongodb.
 
 Starting from the premise in which the database is correctly configured, using the mockito library and based on the ArgumentCaptor, 
 we can validate that the fields sent to mongodb are the expected ones.
