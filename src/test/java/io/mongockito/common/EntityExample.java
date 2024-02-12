@@ -1,6 +1,5 @@
 package io.mongockito.common;
 
-import jakarta.persistence.Entity;
 import java.time.LocalDateTime;
 import java.util.Map;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Value
 @Builder
-@Entity
 @Document("example")
 public class EntityExample {
 

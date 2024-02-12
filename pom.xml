@@ -59,13 +59,6 @@
       <version>${mockito.version}</version>
       <scope>test</scope>
     </dependency>
-    <!-- Persistence annotations like @Entity and @Table -->
-    <dependency>
-      <groupId>jakarta.persistence</groupId>
-      <artifactId>jakarta.persistence-api</artifactId>
-      <version>${jakarta.persistence.version}</version>
-      <scope>test</scope>
-    </dependency>
 
     <!-- Project dependencies -->
     <dependency>
