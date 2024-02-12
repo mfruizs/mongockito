@@ -14,10 +14,10 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object actual = pair.getKey();
-			final Object expected = pair.getValue();
+			final Object currentValue = pair.getKey();
+			final Object expectedValue = pair.getValue();
 
-			assertEquals(String.valueOf(expected), String.valueOf(document.get(actual)));
+			assertEquals(String.valueOf(expectedValue), String.valueOf(document.get(currentValue)));
 		}
 	},
 
@@ -25,8 +25,8 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object key = pair.getKey();
-			assertNotNull(document.get(key));
+			final Object currentValue = pair.getKey();
+			assertNotNull(document.get(currentValue));
 		}
 	},
 
@@ -34,8 +34,8 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object key = pair.getKey();
-			assertNull(document.get(key));
+			final Object currentValue = pair.getKey();
+			assertNull(document.get(currentValue));
 		}
 	},
 
@@ -43,11 +43,11 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object key = pair.getKey();
-			final Map<?, ?> collection = (Map<?, ?>) document.get(key);
-			final Integer expected = (Integer) pair.getValue();
+			final Object fieldName = pair.getKey();
+			final Map<?, ?> fieldMap = (Map<?, ?>) document.get(fieldName);
+			final Integer expectedSize = (Integer) pair.getValue();
 
-			assertEquals(expected, collection.size());
+			assertEquals(expectedSize, fieldMap.size());
 		}
 	};
 
