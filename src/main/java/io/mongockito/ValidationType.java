@@ -14,10 +14,10 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object currentValue = pair.getKey();
+			final Object fieldName = pair.getKey();
 			final Object expectedValue = pair.getValue();
 
-			assertEquals(String.valueOf(expectedValue), String.valueOf(document.get(currentValue)));
+			assertEquals(String.valueOf(expectedValue), String.valueOf(document.get(fieldName)));
 		}
 	},
 
@@ -25,8 +25,8 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object currentValue = pair.getKey();
-			assertNotNull(document.get(currentValue));
+			final Object fieldName = pair.getKey();
+			assertNotNull(document.get(fieldName));
 		}
 	},
 
@@ -34,8 +34,8 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			final Object currentValue = pair.getKey();
-			assertNull(document.get(currentValue));
+			final Object fieldName = pair.getKey();
+			assertNull(document.get(fieldName));
 		}
 	},
 
