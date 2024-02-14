@@ -4,6 +4,8 @@
 
 ## Entity class
 
+* Entity with all fields that collection `MyCollection`
+
 ```java
 @Entity
 @Value
@@ -86,7 +88,7 @@ class MongoRepositoryTest {
     @Test
     void should_find_item_by_code_in_my_collection_correctly() {
     
-        this.sut.findByFooCode( ID_FIELD );
+        this.sut.findById( ID_FIELD );
     
         Verify.builder()
             .addMongoOperation( Operation.FIND_ONE )
@@ -126,7 +128,7 @@ class MongoRepositoryTest {
             .addMongoOperation(Operation.SAVE)
             .addClass( MyEntity.class )
             .addValidation( ValidationType.JSON, MyEntity.class, myEntity )
-            .addValidation( ValidationType.EQUALS, "actiue", true )
+            .addValidation( ValidationType.EQUALS, "active", true )
             .verify( this.mongoTemplate );
     
     }
@@ -174,7 +176,6 @@ class MongoRepositoryTest {
         .isInstanceOf(AssertionError.class);
 
     }
-
 
 }
 
