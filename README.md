@@ -89,7 +89,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .entityExampleMap( createFieldMap() )
         .build();
 	
-    // Validation+
+    // Validation
     Verify.builder()
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
