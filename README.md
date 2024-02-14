@@ -2,9 +2,10 @@
 Java library for Mongodb repository unit testing.
 
 ### Description
-Currently, there is no library that allows to build a local db in the H2 style of mongodb.
+Currently, there is no library that allows you to build an H2-style mongodb in memory.
 
-Starting from the premise in which the database is correctly configured, using the mockito library and based on the ArgumentCaptor, 
+Starting from the premise in which the database is correctly configured, using the mockito library and based on 
+[ArgumentCaptor](https://www.javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/ArgumentCaptor.html), 
 we can validate that the fields sent to mongodb are the expected ones.
 
 ## Prerequisites
@@ -50,8 +51,11 @@ we can validate that the fields sent to mongodb are the expected ones.
 
 ## Examples:
 
+> To see a complete example, follow this [documentation](./EXAMPLE.md)
+
 * The following example will validate MongoDB save operation of a collection item defined by identifier, 
 and will check that the attached fields have been sent to the DB as intended.
+
 ```java
     public static final String ID_FIELD = new ObjectId().toHexString();
 
@@ -85,7 +89,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .entityExampleMap( createFieldMap() )
         .build();
 	
-    // Validation
+    // Validation+
     Verify.builder()
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
