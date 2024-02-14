@@ -1,8 +1,10 @@
 package io.mongockito;
 
+import static io.mongockito.util.json.JsonTool.GSON;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
@@ -49,8 +51,23 @@ public enum ValidationType {
 
 			assertEquals(expectedSize, fieldMap.size());
 		}
-	};
+	},
 
+	JSON {
+		@Override
+		public void validate(Document document, Pair<?, ?> pair) {
+
+			if (pair.getKey() instanceof Class) {
+				final Class<?> clazz = (Class<?>) pair.getKey();
+				final Object expectedObject = pair.getValue();
+				final Object currentDocument = GSON.fromJson(document.toJson(), clazz);
+
+				assertEquals(currentDocument, expectedObject);
+			} else {
+				fail();
+			}
+		}
+	};
 
 	public abstract void validate(Document document, Pair<?, ?> pair);
 

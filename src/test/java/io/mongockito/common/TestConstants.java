@@ -10,7 +10,6 @@ public class TestConstants {
 
 	public static final Operation OPERATION_FIND_BY_ID = Operation.FIND_BY_ID;
 	public static final String DEFAULT_KEY_ID = "_id";
-	public static final String ID_FIELD = new ObjectId().toHexString();
 	public static final String FIELD_LOCKED = "locked";
 	public static final String FIELD_MONTH = "month";
 	public static final String MONTH_VALUE = "01";

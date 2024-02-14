@@ -1,10 +1,10 @@
 package io.mongockito;
 
+import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
-import static io.mongockito.common.TestConstants.ID_FIELD;
 import static io.mongockito.common.TestConstants.OPERATION_FIND_BY_ID;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
