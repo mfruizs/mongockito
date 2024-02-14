@@ -4,7 +4,7 @@
 
 ## Entity class
 
-* Entity with all fields that collection `MyCollection`
+* Entity with all the fields that represent the `MyCollection` collection.
 
 ```java
 @Entity
@@ -29,6 +29,8 @@ public class MyEntity {
 
 ```
 ## Repository class
+
+* All allowed operations that are implemented for this database `MyMongoDB` with the `MyCollection` collection.
 
 ```java
 
@@ -67,6 +69,8 @@ public class MongoRepository {
 
 
 ## Test class
+
+* All tests necessary to validate these operations.
 
 ```java
 import io.mongockito.ValidationType;
