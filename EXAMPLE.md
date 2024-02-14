@@ -11,17 +11,17 @@
 @Builder(toBuilder = true)
 public class MyEntity {
 	
-	@Id
-	@Field(name = "_id")
-	String id;
-
-	@Field("fooCode")
-	int code;
-
-	@Field("desc")
-	String description;
-	
-	boolean active;
+    @Id
+    @Field(name = "_id")
+    String id;
+    
+    @Field("fooCode")
+    int code;
+    
+    @Field("desc")
+    String description;
+    
+    boolean active;
 	
 }
 
@@ -51,7 +51,7 @@ public class MongoRepository {
 
         query.addCriteria(where("_id").is(id));
 
-		return Optional.ofNullable(this.mongoTemplate.findOne(query, MyEntity.class));
+        return Optional.ofNullable(this.mongoTemplate.findOne(query, MyEntity.class));
     }
 
     public MyEntity saveEntity(final MyEntity myEntity) {
