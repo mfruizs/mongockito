@@ -21,7 +21,7 @@ public class JsonTool {
 
 	private GsonBuilder gsonBuilder() {
 
-		GsonBuilder gsonBuilder = new GsonBuilder()
+		final GsonBuilder gsonBuilder = new GsonBuilder()
 			.setFieldNamingStrategy(JsonTool::obtainFieldNaming)
 			.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
 			.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());

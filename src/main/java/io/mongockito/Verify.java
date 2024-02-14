@@ -20,7 +20,7 @@ public class Verify {
 	List<ValidateField> fields;
 	int calls;
 
-	Verify(OperationBuilder builder) {
+	Verify(final OperationBuilder builder) {
 
 		this.operation = builder.operation;
 		this.clazz = builder.clazz;
@@ -50,49 +50,51 @@ public class Verify {
 			return new Verify(this);
 		}
 
-		public OperationBuilder addOperation(Operation operation) {
+		public OperationBuilder addOperation(final Operation operation) {
 
 			this.operation = operation;
 			return this;
 		}
 
-		public OperationBuilder addClass(Class<?> clazz) {
+		public OperationBuilder addClass(final Class<?> clazz) {
 
 			this.clazz = clazz;
 			return this;
 		}
 
-		public OperationBuilder addNumberOfInvocations(int calls) {
+		public OperationBuilder addNumberOfInvocations(final int calls) {
 
 			this.calls = calls;
 			return this;
 		}
 
-		public <K, V> OperationBuilder addValidation(ValidationType validationType, K fieldName, V expectedValue) {
+		public <K, V> OperationBuilder addValidation(final ValidationType validationType,
+													 final K fieldName,
+													 final V expectedValue) {
 
-			return addValidation(validationType, Pair.of(fieldName, expectedValue));
+			return this.addValidation(validationType, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K> OperationBuilder addValidation(ValidationType type, K fieldName) {
+		public <K> OperationBuilder addValidation(final ValidationType type, final K fieldName) {
 
-			return addValidation(type, Pair.of(fieldName, null));
+			return this.addValidation(type, Pair.of(fieldName, null));
 		}
 
-		private <K, V> OperationBuilder addValidation(ValidationType validationType, Pair<K, V> field) {
+		private <K, V> OperationBuilder addValidation(final ValidationType validationType, final Pair<K, V> field) {
 
-			fields = Optional.ofNullable(fields).orElseGet(ArrayList::new);
-			fields.add(ValidateField.builder()
-						   .validationType(validationType)
-						   .field(field)
-						   .build());
+			this.fields = Optional.ofNullable(this.fields).orElseGet(ArrayList::new);
+			this.fields.add(ValidateField.builder()
+								.validationType(validationType)
+								.field(field)
+								.build());
 			return this;
 		}
 
 		public void verify(final MongoTemplate mongoTemplate) {
 
-			final Document document = operation.execute(mongoTemplate, clazz, calls);
+			final Document document = this.operation.execute(mongoTemplate, this.clazz, this.calls);
 
-			fields.forEach(field -> field.getValidationType().validate(document, field.getField()));
+			this.fields.forEach(field -> field.getValidationType().validate(document, field.getField()));
 		}
 
 	}

@@ -55,7 +55,7 @@ public enum ValidationType {
 
 	JSON {
 		@Override
-		public void validate(Document document, Pair<?, ?> pair) {
+		public void validate(final Document document, final Pair<?, ?> pair) {
 
 			if (pair.getKey() instanceof Class) {
 				final Class<?> clazz = (Class<?>) pair.getKey();

@@ -24,6 +24,30 @@ we can validate that the fields sent to mongodb are the expected ones.
     </dependency>
 ```
 
+## Validations
+
+### Operation
+| Operation       |                                                                                                                              Spring Documentation                                                                                                                               |
+|:----------------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| FIND            |                                      [find](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#find(org.springframework.data.mongodb.core.query.Query,java.lang.Class))                                       |
+| FIND_ONE        |                                   [findOne](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#findOne(org.springframework.data.mongodb.core.query.Query,java.lang.Class))                                    |
+| FIND_BY_ID      |                                                   [findById](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#findById(java.lang.Object,java.lang.Class))                                                   |
+| FIND_AND_REMOVE |                             [findAndRemoce](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#findAndRemove(org.springframework.data.mongodb.core.query.Query,java.lang.Class))                              |
+| UPDATE_FIRST    | [updateFirst](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#updateFirst(org.springframework.data.mongodb.core.query.Query,org.springframework.data.mongodb.core.query.UpdateDefinition,java.lang.Class)) |
+| UPDATE_MULTI    | [updateMulti](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#updateMulti(org.springframework.data.mongodb.core.query.Query,org.springframework.data.mongodb.core.query.UpdateDefinition,java.lang.Class)) |
+| UPSERT          |      [upsert](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#upsert(org.springframework.data.mongodb.core.query.Query,org.springframework.data.mongodb.core.query.UpdateDefinition,java.lang.Class))      |
+| SAVE            |                                                                      [save](https://docs.spring.io/spring-data/mongodb/docs/current/api/org/springframework/data/mongodb/core/MongoTemplate.html#save(T))                                                                       |
+
+### ValidationType
+
+| Validation | Description                                                                           |
+|:-----------|:--------------------------------------------------------------------------------------|
+| EQUALS     | Validates that the value of a field is as expected                                    |
+| NOT_NULL   | Validates that the field is not null                                                  |
+| NULL       | Validates that the field is null                                                      |
+| MAP_SIZE   | Validates that map has expected number of elements                                    |
+| JSON       | Validates that the json to be inserted in the collection is equal to the input object |
+
 ## Examples:
 
 * The following example will validate MongoDB save operation of a collection item defined by identifier, 
@@ -41,4 +65,31 @@ and will check that the attached fields have been sent to the DB as intended.
         .addValidation( ValidationType.NOT_NULL, "another_field" )
         .verify();
 
+```
+
+* This is an example to validate no field is missing on save operation
+
+```java
+    public static final String ID_FIELD = new ObjectId().toHexString();
+    public static final LocalDateTime LOCAL_DATE_TIME_NOW = LocalDateTime.now();
+
+    // Item sent on save operation and want to check no field is missing
+    final EntityExample entityExample = EntityExample.builder()
+        .id( ID_FIELD )
+        .month( "02" )
+        .locked( Boolean.TRUE )
+        .creationUser( "User_a" )
+        .creationTimestamp( LOCAL_DATE_TIME_NOW )
+        .lastUpdateUser( "User_b" )
+        .lastUpdateTimestamp( LOCAL_DATE_TIME_NOW.plusDays( INTEGER_ONE ) )
+        .entityExampleMap( createFieldMap() )
+        .build();
+	
+    // Validation
+    Verify.builder()
+        .addOperation( Operation.SAVE )
+        .addClass( EntityExample.class )
+        .addValidation( ValidationType.JSON, EntityExample.class,  entityExample)
+        .verify();
+	
 ```
