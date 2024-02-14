@@ -89,7 +89,7 @@ and will check that the attached fields have been sent to the DB as intended.
     Verify.builder()
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
-        .addValidation( ValidationType.JSON, EntityExample.class,  entityExample)
+        .addValidation( ValidationType.JSON, EntityExample.class,  entityExample )
         .verify();
 	
 ```
