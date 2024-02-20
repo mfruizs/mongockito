@@ -12,10 +12,17 @@
   <name>mongockito</name>
   <url>https://github.com/mfruizs/mongockito</url>
 
+  <developers>
+    <developer>
+      <name>Manuel Fco Ruiz Sanchez</name>
+      <url>https://github.com/mfruizs/mongockito</url>
+    </developer>
+  </developers>
+
   <properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
+    <java.version>17</java.version>
+    <maven.compiler.release>17</maven.compiler.release>
+
     <!-- dependencies -->
     <spring-boot.version>3.2.2</spring-boot.version>
     <junit-jupiter.version>5.9.2</junit-jupiter.version>
@@ -130,6 +137,48 @@
           </archive>
         </configuration>
       </plugin>
+      <!-- Plugin for Javadoc and Sources -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.3.0</version>
+        <configuration>
+          <links>
+            <link>https://docs.oracle.com/en/java/javase/17/docs/api/</link>
+          </links>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
+
+  <!-- Release information -->
+  <distributionManagement>
+    <repository>
+      <id>github</id>
+      <name>GitHub mfruizs Apache Maven Packages</name>
+      <url>https://maven.pkg.github.com/mfruizs/mongockito</url>
+    </repository>
+  </distributionManagement>
+
+  <scm>
+    <connection>scm:git:git://github.com/mfruizs/mongockito.git</connection>
+    <developerConnection>scm:git:ssh://github.com:mfruizs/mongockito.git</developerConnection>
+    <url>http://github.com/mfruizs/mongockito/tree/main</url>
+  </scm>
+  
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>http://www.opensource.org/licenses/mit-license.php</url>
+    </license>
+  </licenses>
+
 </project>
