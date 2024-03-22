@@ -12,7 +12,7 @@
 @Document("MyCollection")
 @Builder(toBuilder = true)
 public class MyEntity {
-	
+
     @Id
     @Field(name = "_id")
     String id;
@@ -24,7 +24,7 @@ public class MyEntity {
     String description;
     
     boolean active;
-	
+
 }
 
 ```
@@ -62,9 +62,8 @@ public class MongoRepository {
 
         return this.mongoTemplate.save(myEntity);
     }
-		
+
 }
-	
 ```
 
 
@@ -131,7 +130,7 @@ class MongoRepositoryTest {
         Verify.builder()
             .addMongoOperation(Operation.SAVE)
             .addClass( MyEntity.class )
-            .addValidation( ValidationType.JSON, MyEntity.class, myEntity )
+            .addValidation( ValidationType.JSON, myEntity )
             .addValidation( ValidationType.EQUALS, "active", true )
             .verify( this.mongoTemplate );
     
@@ -153,7 +152,7 @@ class MongoRepositoryTest {
             .addMongoOperation(Operation.SAVE)
             .addClass( MyEntity.class )
             .addValidation( ValidationType.EQUALS, "fooCode", "bar" )
-			.addValidation( ValidationType.NOT_NULL, "desc" )
+            .addValidation( ValidationType.NOT_NULL, "desc" )
             .addValidation( ValidationType.EQUALS, "active", true )
         .verify( this.mongoTemplate );
     
@@ -183,4 +182,71 @@ class MongoRepositoryTest {
 
 }
 
+```
+
+## Creating an adapter method
+
+* With **JSON** validation maybe you need to implement your own adapters using 'addAdapter' method
+
+```java 
+    @Test
+    void should_save_item_in_my_collection_correctly() {
+    
+        MyEntity myEntity = MyEntity.builder()
+            .id( ID_FIELD )
+            .fooCode( "bar" )
+            .description( "lore ipsum" )
+            .active( true )
+            .build();
+    
+        this.sut.save( myEntity );
+    
+        Verify.builder()
+            .addMongoOperation(Operation.SAVE)
+            .addClass( MyEntity.class )
+            .addValidation( ValidationType.JSON, myEntity )
+            .addAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+            .verify( this.mongoTemplate );
+    
+    }
+```
+
+* **LocalDateTimeAdapter** definition:
+```java
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
+
+public class LocalDateTimeAdapter extends TypeAdapter<LocalDateTime> {
+
+	// Here, we are defining the iso format for date objects
+	private static final DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+	@Override
+	public void write(final JsonWriter out, final LocalDateTime value) throws IOException {
+
+		if (Objects.isNull(value)) {
+			out.nullValue();
+		} else {
+			out.value(formatter.format(value));
+		}
+	}
+
+	@Override
+	public LocalDateTime read(final JsonReader in) throws IOException {
+
+		if (in.peek() == JsonToken.NULL) {
+			in.nextNull();
+			return null;
+		} else {
+			final String dateString = in.nextString();
+			return LocalDateTime.parse(dateString, formatter);
+		}
+	}
+} 
 ```

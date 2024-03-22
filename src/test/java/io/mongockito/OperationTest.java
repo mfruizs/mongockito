@@ -5,7 +5,7 @@ import static io.mongockito.common.EntityExampleObjectMother.MONTH_VALUE_01;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
-import static io.mongockito.util.json.JsonTool.GSON;
+import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
@@ -37,7 +37,7 @@ class OperationTest {
 		this.mongoTemplate.find(query, EntityExample.class);
 
 		final Document document = Operation.FIND.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 	}
@@ -50,7 +50,7 @@ class OperationTest {
 		this.mongoTemplate.findOne(query, EntityExample.class);
 
 		final Document document = Operation.FIND_ONE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 
@@ -62,7 +62,7 @@ class OperationTest {
 		this.mongoTemplate.findById(ID_FIELD, EntityExample.class);
 
 		final Document document = Operation.FIND_BY_ID.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 
@@ -77,7 +77,7 @@ class OperationTest {
 		this.mongoTemplate.findAndRemove(query, EntityExample.class);
 
 		final Document document = Operation.FIND_AND_REMOVE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 
@@ -95,7 +95,7 @@ class OperationTest {
 		this.mongoTemplate.updateFirst(query, update, EntityExample.class);
 
 		final Document document = Operation.UPDATE_FIRST.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 		assertEquals(Boolean.TRUE, entity.isLocked());
@@ -114,7 +114,7 @@ class OperationTest {
 		this.mongoTemplate.updateMulti(query, update, EntityExample.class);
 
 		final Document document = Operation.UPDATE_MULTI.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 		assertEquals(Boolean.TRUE, entity.isLocked());
@@ -134,7 +134,7 @@ class OperationTest {
 		this.mongoTemplate.upsert(query, update, EntityExample.class);
 
 		final Document document = Operation.UPSERT.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
 		assertEquals(Boolean.TRUE, entity.isLocked());
@@ -150,7 +150,7 @@ class OperationTest {
 		this.mongoTemplate.save(entityExample);
 
 		final Document document = Operation.SAVE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
-		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
+		final EntityExample entity = gsonBuilder().fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(entityExample, entity);
 	}

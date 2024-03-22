@@ -1,11 +1,10 @@
 package io.mongockito;
 
-import static io.mongockito.util.json.JsonTool.GSON;
+import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import io.mongockito.util.config.MongockitoConfiguration;
 import java.util.Collection;
 import org.bson.Document;
 import org.mockito.ArgumentCaptor;
@@ -86,7 +85,8 @@ public enum Operation {
 
 			final ArgumentCaptor<?> saveCaptor = ArgumentCaptor.forClass(clazz);
 			verify(mongoTemplate, times(calls)).save(saveCaptor.capture());
-			return Document.parse(GSON.toJson(saveCaptor.getValue()));
+			return Document.parse(gsonBuilder().toJson(saveCaptor.getValue()));
+
 		}
 	};
 
@@ -100,8 +100,7 @@ public enum Operation {
 		return responseDoc;
 	}
 
-	private static final MongockitoConfiguration config = new MongockitoConfiguration();
-	public static final String DEFAULT_KEY_ID = config.getDefaultId();
+	public static final String DEFAULT_KEY_ID = "_id";
 	private static final ArgumentCaptor<Query> queryCaptor = ArgumentCaptor.forClass(Query.class);
 	private static final ArgumentCaptor<Update> updateCaptor = ArgumentCaptor.forClass(Update.class);
 	private static final ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);

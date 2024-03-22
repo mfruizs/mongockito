@@ -2,6 +2,9 @@ package io.mongockito;
 
 import static lombok.AccessLevel.PRIVATE;
 
+import io.mongockito.util.json.JsonTool;
+import io.mongockito.util.json.adapters.Adapter;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,8 @@ public class Verify {
 	Class<?> clazz;
 	List<ValidateField> fields;
 	int calls;
+	List<Adapter> adapters;
+	boolean allowNulls;
 
 	Verify(final OperationBuilder builder) {
 
@@ -26,6 +31,8 @@ public class Verify {
 		this.clazz = builder.clazz;
 		this.fields = builder.fields;
 		this.calls = builder.calls;
+		this.adapters = builder.adapters;
+		this.allowNulls = builder.allowNulls;
 	}
 
 	public static OperationBuilder builder() {
@@ -40,6 +47,8 @@ public class Verify {
 		Class<?> clazz;
 		List<ValidateField> fields;
 		private int calls = 1;
+		List<Adapter> adapters;
+		boolean allowNulls = true;
 
 		OperationBuilder() {
 
@@ -90,7 +99,23 @@ public class Verify {
 			return this;
 		}
 
+		public OperationBuilder allowSerializeNulls(boolean allow) {
+
+			this.allowNulls = allow;
+			return this;
+		}
+
+		public OperationBuilder addAdapter(final Type type, final Object typeAdapter) {
+
+			this.adapters = Optional.ofNullable(this.adapters).orElseGet(ArrayList::new);
+			this.adapters.add(Adapter.builder().type(type).typeAdapter(typeAdapter).build());
+			return this;
+		}
+
 		public void verify(final MongoTemplate mongoTemplate) {
+
+			JsonTool.addAdapters(this.adapters);
+			JsonTool.allowSerializeNulls(allowNulls);
 
 			final Document document = this.operation.execute(mongoTemplate, this.clazz, this.calls);
 

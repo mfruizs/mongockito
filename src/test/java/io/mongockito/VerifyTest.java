@@ -1,8 +1,10 @@
 package io.mongockito;
 
+import static io.mongockito.Operation.SAVE;
 import static io.mongockito.common.EntityExampleObjectMother.DATE_NOW;
 import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
 import static io.mongockito.common.EntityExampleObjectMother.MONTH_VALUE_01;
+import static io.mongockito.common.EntityExampleObjectMother.createEntityExample;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
@@ -12,11 +14,17 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import io.mongockito.Verify.OperationBuilder;
 import io.mongockito.common.EntityExample;
+import io.mongockito.util.json.adapters.Adapter;
+import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
+import io.mongockito.util.json.adapters.ObjectIdAdapter;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -108,6 +116,42 @@ class VerifyTest {
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
 			.addNumberOfInvocations(1)
 			.verify(this.mongoTemplate);
+
+	}
+
+	@Test
+	void should_add_json_adapters_correctly() {
+
+		final EntityExample entityExample = createEntityExample();
+		final ObjectIdAdapter objectIdAdapter = new ObjectIdAdapter();
+		final LocalDateTimeAdapter localDateTimeAdapter = new LocalDateTimeAdapter();
+
+		this.mongoTemplate.save(entityExample);
+
+		final Verify result = this.operationBuilder.addOperation(SAVE)
+			.addClass(EntityExample.class)
+			.allowSerializeNulls(false)
+			.addAdapter(ObjectId.class, objectIdAdapter)
+			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
+			.addValidation(ValidationType.JSON, entityExample)
+			.build();
+
+		assertFalse(result.isAllowNulls());
+
+		final List<ValidateField> validateFields = result.getFields();
+		assertEquals(INTEGER_ONE, validateFields.size());
+
+		final ValidateField jsonValidation = validateFields.get(INTEGER_ZERO);
+		assertEquals(ValidationType.JSON, jsonValidation.getValidationType(), "Error adding validation type field");
+		assertEquals(Pair.of(entityExample, null), jsonValidation.getField(), "Error adding pair of fields");
+
+		final List<Adapter> adapters = result.getAdapters();
+		assertEquals(INTEGER_TWO, adapters.size());
+		assertEquals(ObjectId.class, adapters.get(INTEGER_ZERO).getType());
+		assertEquals(objectIdAdapter, adapters.get(INTEGER_ZERO).getTypeAdapter());
+		assertEquals(LocalDateTime.class, adapters.get(INTEGER_ONE).getType());
+		assertEquals(localDateTimeAdapter, adapters.get(INTEGER_ONE).getTypeAdapter());
+
 	}
 
 
