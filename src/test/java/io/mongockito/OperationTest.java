@@ -8,6 +8,7 @@ import static io.mongockito.common.TestConstants.FIELD_MONTH;
 import static io.mongockito.util.json.JsonTool.GSON;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import io.mongockito.common.EntityExample;
@@ -36,7 +37,7 @@ class OperationTest {
 		query.addCriteria(where(DEFAULT_KEY_ID).is(ID_FIELD));
 		this.mongoTemplate.find(query, EntityExample.class);
 
-		final Document document = Operation.FIND.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.FIND.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -49,7 +50,7 @@ class OperationTest {
 		query.addCriteria(where(DEFAULT_KEY_ID).is(ID_FIELD));
 		this.mongoTemplate.findOne(query, EntityExample.class);
 
-		final Document document = Operation.FIND_ONE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.FIND_ONE.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -61,7 +62,7 @@ class OperationTest {
 
 		this.mongoTemplate.findById(ID_FIELD, EntityExample.class);
 
-		final Document document = Operation.FIND_BY_ID.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.FIND_BY_ID.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -76,7 +77,7 @@ class OperationTest {
 
 		this.mongoTemplate.findAndRemove(query, EntityExample.class);
 
-		final Document document = Operation.FIND_AND_REMOVE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.FIND_AND_REMOVE.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -94,7 +95,7 @@ class OperationTest {
 		update.set(FIELD_LOCKED, Boolean.TRUE);
 		this.mongoTemplate.updateFirst(query, update, EntityExample.class);
 
-		final Document document = Operation.UPDATE_FIRST.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.UPDATE_FIRST.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -113,7 +114,7 @@ class OperationTest {
 		update.set(FIELD_LOCKED, Boolean.TRUE);
 		this.mongoTemplate.updateMulti(query, update, EntityExample.class);
 
-		final Document document = Operation.UPDATE_MULTI.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.UPDATE_MULTI.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -133,7 +134,7 @@ class OperationTest {
 		update.set(FIELD_MONTH, MONTH_VALUE_01);
 		this.mongoTemplate.upsert(query, update, EntityExample.class);
 
-		final Document document = Operation.UPSERT.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.UPSERT.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(ID_FIELD, entity.getId());
@@ -149,7 +150,7 @@ class OperationTest {
 
 		this.mongoTemplate.save(entityExample);
 
-		final Document document = Operation.SAVE.execute(this.mongoTemplate, EntityExample.class, INTEGER_ONE);
+		final Document document = Operation.SAVE.execute(this.mongoTemplate, EntityExample.class, times(INTEGER_ONE));
 		final EntityExample entity = GSON.fromJson(document.toJson(), EntityExample.class);
 
 		assertEquals(entityExample, entity);

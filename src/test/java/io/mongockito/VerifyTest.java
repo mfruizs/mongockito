@@ -12,6 +12,7 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 
 import io.mongockito.Verify.OperationBuilder;
 import io.mongockito.common.EntityExample;
@@ -22,6 +23,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.verification.VerificationMode;
 import org.springframework.data.mongodb.core.MongoTemplate;
 
 @ExtendWith(MockitoExtension.class)
@@ -89,12 +91,13 @@ class VerifyTest {
 	@Test
 	void should_create_a_build_object_with_correct_number_of_invocations() {
 
+		VerificationMode verificationMode = times(INTEGER_TWO);
 		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
 			.addClass(EntityExample.class)
-			.addNumberOfInvocations(INTEGER_TWO)
+			.addVerificationMode(verificationMode)
 			.build();
 
-		assertEquals(INTEGER_TWO, result.getCalls(), "Error adding number of invocations");
+		assertEquals(verificationMode, result.getVerificationMode(), "Error adding number of invocations");
 
 	}
 
@@ -106,7 +109,7 @@ class VerifyTest {
 		this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
 			.addClass(EntityExample.class)
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
-			.addNumberOfInvocations(1)
+			.addVerificationMode(times(INTEGER_ONE))
 			.verify(this.mongoTemplate);
 	}
 

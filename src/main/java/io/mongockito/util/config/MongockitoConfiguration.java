@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "mongockito")
 public class MongockitoConfiguration {
 
-	private String defaultId = "_id";
 	private boolean serializeNulls = true;
 
 }
