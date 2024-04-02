@@ -175,6 +175,7 @@ class MongoRepositoryTest {
             .addMongoOperation(Operation.SAVE)
             .addClass( MyEntity.class )
             .addValidation( ValidationType.EQUALS, "active", false )
+			.addVerificationMode(times(INTEGER_ONE))
             .verify( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
 
