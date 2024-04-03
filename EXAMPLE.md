@@ -140,11 +140,11 @@ class MongoRepositoryTest {
     void should_validate_field_one_by_one_on_save_operation_correctly() {
     
         MyEntity myEntity = MyEntity.builder()
-        .id( ID_FIELD )
-        .fooCode( "bar" )
-        .description( "lore ipsum" )
-        .active( true )
-        .build();
+            .id( ID_FIELD )
+            .fooCode( "bar" )
+            .description( "lore ipsum" )
+            .active( true )
+            .build();
         
         this.sut.save( myEntity );
         
@@ -154,7 +154,7 @@ class MongoRepositoryTest {
             .addValidation( ValidationType.EQUALS, "fooCode", "bar" )
             .addValidation( ValidationType.NOT_NULL, "desc" )
             .addValidation( ValidationType.EQUALS, "active", true )
-        .verify( this.mongoTemplate );
+            .verify( this.mongoTemplate );
     
     }
 
@@ -175,7 +175,7 @@ class MongoRepositoryTest {
             .addMongoOperation(Operation.SAVE)
             .addClass( MyEntity.class )
             .addValidation( ValidationType.EQUALS, "active", false )
-			.addVerificationMode(times(INTEGER_ONE))
+            .addVerificationMode(times(INTEGER_ONE))
             .verify( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
 

@@ -19,6 +19,8 @@ public class EntityExample {
 
 	int amount;
 
+	Integer nullableValue;
+
 	boolean locked;
 
 	String month;

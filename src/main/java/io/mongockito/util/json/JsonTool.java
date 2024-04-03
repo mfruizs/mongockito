@@ -18,25 +18,21 @@ import org.springframework.data.mongodb.core.mapping.FieldType;
 @UtilityClass
 public class JsonTool {
 
+	public static final Adapter DEFAULT_OBJECT_ID_ADAPTER = Adapter.builder()
+		.typeClass(ObjectId.class)
+		.typeAdapter(new ObjectIdAdapter())
+		.build();
+
+	public static final Adapter DEFAULT_LOCAL_DATE_TIME_ADAPTER = Adapter.builder()
+		.typeClass(LocalDateTime.class)
+		.typeAdapter(new LocalDateTimeAdapter())
+		.build();
+
 	private final List<Adapter> adapters = new ArrayList<>();
 	private boolean allowNulls = true;
 
 	public static Gson gsonBuilder() {
-
 		return createGsonBuilder().create();
-	}
-
-	private static GsonBuilder createGsonBuilder() {
-
-		final GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingStrategy(JsonTool::obtainFieldNaming);
-
-		addAdaptersOnBuilder(gsonBuilder);
-
-		if (allowNulls) {
-			gsonBuilder.serializeNulls();
-		}
-
-		return gsonBuilder;
 	}
 
 	public static void addAdapters(final List<Adapter> newAdapters) {
@@ -46,41 +42,58 @@ public class JsonTool {
 		}
 	}
 
-	public static void clearAdapters() {
-
-		adapters.clear();
+	public static void allowSerializeNulls(final boolean allow) {
+		allowNulls = allow;
 	}
 
-	private static void addAdaptersOnBuilder(final GsonBuilder gsonBuilder) {
+	public static void reset() {
+		adapters.clear();
+		allowNulls = true;
+	}
 
-		if (adapters.isEmpty()) {
-			gsonBuilder.registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter());
-			gsonBuilder.registerTypeAdapter(ObjectId.class, new ObjectIdAdapter());
-		} else {
-			adapters.forEach(adapter -> addAdapterToBuilder(gsonBuilder, adapter));
+	private static GsonBuilder createGsonBuilder() {
+
+		final GsonBuilder gsonBuilder = new GsonBuilder().setFieldNamingStrategy(JsonTool::obtainFieldNaming);
+
+		addAdaptersToBuilder(gsonBuilder);
+
+		if (allowNulls) {
+			gsonBuilder.serializeNulls();
 		}
+
+		return gsonBuilder;
+	}
+
+	private static void addAdaptersToBuilder(final GsonBuilder gsonBuilder) {
+
+		final List<Adapter> defaultOrAdapters = obtainJsonAdapters();
+
+		defaultOrAdapters.forEach(adapter -> addAdapterToBuilder(gsonBuilder, adapter));
+	}
+
+	private static List<Adapter> obtainJsonAdapters() {
+
+		return adapters.isEmpty()
+			? List.of( DEFAULT_OBJECT_ID_ADAPTER, DEFAULT_LOCAL_DATE_TIME_ADAPTER)
+			: adapters;
 	}
 
 	private static void addAdapterToBuilder(final GsonBuilder gsonBuilder, final Adapter adapter) {
 
-		gsonBuilder.registerTypeAdapter(adapter.getType(), adapter.getTypeAdapter());
+		gsonBuilder.registerTypeAdapter(adapter.getTypeClass(), adapter.getTypeAdapter());
 	}
 
 	private static String obtainFieldNaming(final java.lang.reflect.Field f) {
 
 		final Field fieldAnnotation = f.getAnnotation(Field.class);
+
 		if (fieldAnnotation != null && FieldType.IMPLICIT.equals(fieldAnnotation.targetType())) {
 			return isEmpty(fieldAnnotation.value())
 				? fieldAnnotation.name()
 				: fieldAnnotation.value();
 		}
+
 		return f.getName();
 	}
-
-	public static void allowSerializeNulls(boolean allow) {
-
-		allowNulls = allow;
-	}
-
 
 }

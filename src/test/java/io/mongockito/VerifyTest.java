@@ -6,16 +6,19 @@ import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
 import static io.mongockito.common.EntityExampleObjectMother.MONTH_VALUE_01;
 import static io.mongockito.common.EntityExampleObjectMother.createEntityExample;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
+import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
+import static io.mongockito.common.TestConstants.NULLABLE_VALUE_FIELD;
 import static io.mongockito.common.TestConstants.OPERATION_FIND_BY_ID;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.times;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.times;
 
 import io.mongockito.Verify.OperationBuilder;
 import io.mongockito.common.EntityExample;
@@ -51,7 +54,23 @@ class VerifyTest {
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
 			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
 			.addValidation(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
-			.addValidation(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
+			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
+			.build();
+
+		assertEquals(OPERATION_FIND_BY_ID, result.getOperation(), "Error adding operation type");
+		assertEquals(EntityExample.class, result.getClazz(), "Error adding class");
+
+	}
+
+	@Test
+	void should_create_a_build_object_with_correct_operation_and_class_using_validate_equals_method() {
+
+		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
+			.addClass(EntityExample.class)
+			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validateEquals(FIELD_LOCKED, true)
+			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
+			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
 			.build();
 
 		assertEquals(OPERATION_FIND_BY_ID, result.getOperation(), "Error adding operation type");
@@ -67,7 +86,7 @@ class VerifyTest {
 			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
 			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
 			.addValidation(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
-			.addValidation(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
+			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
 			.addValidation(ValidationType.EQUALS, FIELD_LAST_UPDATE_TIMESTAMP, DATE_NOW)
 			.build();
 
@@ -99,7 +118,8 @@ class VerifyTest {
 	@Test
 	void should_create_a_build_object_with_correct_number_of_invocations() {
 
-		VerificationMode verificationMode = times(INTEGER_TWO);
+		final VerificationMode verificationMode = times(INTEGER_TWO);
+
 		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
 			.addClass(EntityExample.class)
 			.addVerificationMode(verificationMode)
@@ -131,12 +151,13 @@ class VerifyTest {
 
 		this.mongoTemplate.save(entityExample);
 
-		final Verify result = this.operationBuilder.addOperation(SAVE)
+		final Verify result = this.operationBuilder
+			.addOperation(SAVE)
 			.addClass(EntityExample.class)
 			.allowSerializeNulls(false)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
-			.addValidation(ValidationType.JSON, entityExample)
+			.validateJson(entityExample)
 			.build();
 
 		assertFalse(result.isAllowNulls());
@@ -150,11 +171,34 @@ class VerifyTest {
 
 		final List<Adapter> adapters = result.getAdapters();
 		assertEquals(INTEGER_TWO, adapters.size());
-		assertEquals(ObjectId.class, adapters.get(INTEGER_ZERO).getType());
+		assertEquals(ObjectId.class, adapters.get(INTEGER_ZERO).getTypeClass());
 		assertEquals(objectIdAdapter, adapters.get(INTEGER_ZERO).getTypeAdapter());
-		assertEquals(LocalDateTime.class, adapters.get(INTEGER_ONE).getType());
+		assertEquals(LocalDateTime.class, adapters.get(INTEGER_ONE).getTypeClass());
 		assertEquals(localDateTimeAdapter, adapters.get(INTEGER_ONE).getTypeAdapter());
 
+	}
+
+	@Test
+	void should_verify_all_validation_type_correctly() {
+
+		final EntityExample entityExample = createEntityExample();
+		final ObjectIdAdapter objectIdAdapter = new ObjectIdAdapter();
+		final LocalDateTimeAdapter localDateTimeAdapter = new LocalDateTimeAdapter();
+
+		this.mongoTemplate.save(entityExample);
+
+		Verify.builder()
+			.addOperation(SAVE)
+			.addClass(EntityExample.class)
+			.allowSerializeNulls(true)
+			.addAdapter(ObjectId.class, objectIdAdapter)
+			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
+			.validateJson(entityExample)
+			.validateNull(NULLABLE_VALUE_FIELD)
+			.validateNotNull(DEFAULT_KEY_ID)
+			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
+			.validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
+			.verify(this.mongoTemplate);;
 	}
 
 

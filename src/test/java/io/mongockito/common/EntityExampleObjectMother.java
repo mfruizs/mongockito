@@ -25,8 +25,13 @@ public class EntityExampleObjectMother {
 
 	public static EntityExample createEntityExample() {
 
-		return EntityExample.builder().id(ID_FIELD).month(MONTH_VALUE_02)
-			.locked(Boolean.TRUE).creationUser("User_a").creationTimestamp(DATE_NOW).lastUpdateUser("User_b")
+		return EntityExample.builder()
+			.id(ID_FIELD)
+			.month(MONTH_VALUE_02)
+			.locked(Boolean.TRUE)
+			.creationUser("User_a")
+			.creationTimestamp(DATE_NOW)
+			.lastUpdateUser("User_b")
 			.lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
 			.entityExampleMap(createFieldMap())
 			.build();

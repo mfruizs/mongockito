@@ -7,6 +7,6 @@ import lombok.Value;
 @Value
 @Builder
 public class Adapter {
-	Type type;
+	Type typeClass;
 	Object typeAdapter;
 }

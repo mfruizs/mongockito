@@ -67,7 +67,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .addValidation( ValidationType.EQUALS,   "string_field", "name" )
         .addValidation( ValidationType.NULL,     "one_field" )
         .addValidation( ValidationType.NOT_NULL, "another_field" )
-        .verify();
+        .verify( <mongoTemplate> );
 
 ```
 
@@ -93,8 +93,16 @@ and will check that the attached fields have been sent to the DB as intended.
     Verify.builder()
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
+        // general validations
         .addValidation( ValidationType.JSON, EntityExample.class,  entityExample )
         .addVerificationMode(times(INTEGER_ONE))
-        .verify();
+        // specific methods 
+        .validateJson(entityExample)
+        .validateNull(NULLABLE_VALUE_FIELD)
+        .validateNotNull(DEFAULT_KEY_ID)
+        .validateEquals(DEFAULT_KEY_ID, entityExample.getId())
+        .validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
+        
+        .verify( <mongoTemplate> );
 	
 ```
