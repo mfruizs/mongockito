@@ -1,7 +1,8 @@
-package io.mongockito.common;
+package io.mongockito.common.business;
 
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 
+import io.mongockito.common.model.EntityExample;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.bson.types.ObjectId;
@@ -25,8 +26,13 @@ public class EntityExampleObjectMother {
 
 	public static EntityExample createEntityExample() {
 
-		return EntityExample.builder().id(ID_FIELD).month(MONTH_VALUE_02)
-			.locked(Boolean.TRUE).creationUser("User_a").creationTimestamp(DATE_NOW).lastUpdateUser("User_b")
+		return EntityExample.builder()
+			.id(ID_FIELD)
+			.month(MONTH_VALUE_02)
+			.locked(Boolean.TRUE)
+			.creationUser("User_a")
+			.creationTimestamp(DATE_NOW)
+			.lastUpdateUser("User_b")
 			.lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
 			.entityExampleMap(createFieldMap())
 			.build();

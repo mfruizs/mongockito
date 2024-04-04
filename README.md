@@ -67,7 +67,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .addValidation( ValidationType.EQUALS,   "string_field", "name" )
         .addValidation( ValidationType.NULL,     "one_field" )
         .addValidation( ValidationType.NOT_NULL, "another_field" )
-        .verify();
+        .verify( <mongoTemplate> );
 
 ```
 
@@ -95,6 +95,37 @@ and will check that the attached fields have been sent to the DB as intended.
         .addClass( EntityExample.class )
         .addValidation( ValidationType.JSON, EntityExample.class,  entityExample )
         .addVerificationMode(times(INTEGER_ONE))
-        .verify();
+        .verify( <mongoTemplate> );
+	
+```
+
+* In this example we validate with specific methods for the save operation
+
+```java
+    public static final String ID_FIELD = new ObjectId().toHexString();
+    public static final LocalDateTime LOCAL_DATE_TIME_NOW = LocalDateTime.now();
+
+    // Item sent on save operation and want to check no field is missing
+    final EntityExample entityExample = EntityExample.builder()
+        .id( ID_FIELD )
+        .month( "02" )
+        .locked( Boolean.TRUE )
+        .creationUser( "User_a" )
+        .creationTimestamp( LOCAL_DATE_TIME_NOW )
+        .lastUpdateUser( "User_b" )
+        .lastUpdateTimestamp( LOCAL_DATE_TIME_NOW.plusDays( INTEGER_ONE ) )
+        .entityExampleMap( createFieldMap() )
+        .build();
+	
+    // Validation
+    Verify.builder()
+        .addOperation( Operation.SAVE )
+        .addClass( EntityExample.class )
+        .validateJson(entityExample)
+        .validateNull(NULLABLE_VALUE_FIELD)
+        .validateNotNull(DEFAULT_KEY_ID)
+        .validateEquals(DEFAULT_KEY_ID, entityExample.getId())
+        .validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
+        .verify( <mongoTemplate> );
 	
 ```

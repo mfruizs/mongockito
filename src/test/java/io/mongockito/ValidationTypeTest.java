@@ -1,15 +1,15 @@
 package io.mongockito;
 
-import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
-import static io.mongockito.common.EntityExampleObjectMother.ID_FILED_OTHER;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FILED_OTHER;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
-import static io.mongockito.util.json.JsonTool.GSON;
+import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import io.mongockito.common.EntityExample;
-import io.mongockito.common.EntityExampleObjectMother;
+import io.mongockito.common.model.EntityExample;
+import io.mongockito.common.business.EntityExampleObjectMother;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bson.Document;
@@ -25,7 +25,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createSimpleEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		ValidationType.EQUALS.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD));
 	}
@@ -35,7 +35,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createSimpleEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		assertThatThrownBy(() -> ValidationType.EQUALS.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FILED_OTHER)))
 			.isInstanceOf(AssertionError.class);
@@ -46,7 +46,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createSimpleEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		ValidationType.NOT_NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD));
 	}
@@ -56,7 +56,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExample.builder().build();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		assertThatThrownBy(() -> ValidationType.NOT_NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD)))
 			.isInstanceOf(AssertionError.class);
@@ -67,7 +67,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExample.builder().build();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		ValidationType.NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD));
 	}
@@ -77,7 +77,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createSimpleEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		assertThatThrownBy(() -> ValidationType.NULL.validate(doc, Pair.of(DEFAULT_KEY_ID, ID_FIELD)))
 			.isInstanceOf(AssertionError.class);
@@ -89,7 +89,7 @@ class ValidationTypeTest {
 		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
 		final Map<String, EntityExample> entityExampleFieldMap = entityExample.getEntityExampleMap();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		ValidationType.MAP_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, entityExampleFieldMap.size()));
 	}
@@ -99,7 +99,7 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 		assertThatThrownBy(() -> ValidationType.MAP_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, INTEGER_ONE)))
 			.isInstanceOf(AssertionError.class);
@@ -110,9 +110,9 @@ class ValidationTypeTest {
 
 		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
-		ValidationType.JSON.validate(doc, Pair.of(EntityExample.class, entityExample));
+		ValidationType.JSON.validate(doc, Pair.of(entityExample, null));
 	}
 
 	@Test
@@ -121,10 +121,10 @@ class ValidationTypeTest {
 		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
 		final EntityExample simpleEntityExample = EntityExampleObjectMother.createSimpleEntityExample();
 
-		final Document doc = Document.parse(GSON.toJson(entityExample));
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
 
-		assertThatThrownBy(() -> ValidationType.JSON.validate(doc, Pair.of(EntityExample.class, simpleEntityExample)))
+		assertThatThrownBy(() -> ValidationType.JSON.validate(doc, Pair.of(simpleEntityExample, null)))
 			.isInstanceOf(AssertionError.class);
 	}
 

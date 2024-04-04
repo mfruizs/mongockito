@@ -1,6 +1,6 @@
 package io.mongockito;
 
-import static io.mongockito.util.json.JsonTool.GSON;
+import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -57,15 +57,15 @@ public enum ValidationType {
 		@Override
 		public void validate(final Document document, final Pair<?, ?> pair) {
 
-			if (pair.getKey() instanceof Class) {
-				final Class<?> clazz = (Class<?>) pair.getKey();
-				final Object expectedObject = pair.getValue();
-				final Object currentDocument = GSON.fromJson(document.toJson(), clazz);
-
-				assertEquals(currentDocument, expectedObject);
-			} else {
-				fail();
+			if (pair.getKey() == null) {
+				fail("Mandatory object on first pair parameter");
 			}
+
+			final Class<?>  clazz = pair.getKey().getClass();
+			final Object expectedObject = pair.getKey();
+			final Object currentDocument = gsonBuilder().fromJson(document.toJson(), clazz);
+
+			assertEquals(currentDocument, expectedObject);
 		}
 	};
 

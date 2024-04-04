@@ -1,6 +1,6 @@
 package io.mongockito;
 
-import static io.mongockito.util.json.JsonTool.GSON;
+import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 
@@ -85,7 +85,7 @@ public enum Operation {
 
 			final ArgumentCaptor<?> saveCaptor = ArgumentCaptor.forClass(clazz);
 			verify(mongoTemplate, verificationMode).save(saveCaptor.capture());
-			return Document.parse(GSON.toJson(saveCaptor.getValue()));
+			return Document.parse(gsonBuilder().toJson(saveCaptor.getValue()));
 		}
 	};
 

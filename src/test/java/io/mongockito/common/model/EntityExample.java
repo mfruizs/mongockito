@@ -1,4 +1,4 @@
-package io.mongockito.common;
+package io.mongockito.common.model;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -18,6 +18,8 @@ public class EntityExample {
 	String id;
 
 	int amount;
+
+	Integer nullableValue;
 
 	boolean locked;
 
