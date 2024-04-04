@@ -5,8 +5,9 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 
+import io.mongockito.model.ValidateField;
 import io.mongockito.util.json.JsonTool;
-import io.mongockito.util.json.adapters.Adapter;
+import io.mongockito.util.json.model.Adapter;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -135,6 +136,14 @@ public class Verify {
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON, expectedValue);
+		}
+
+		public <K, V> OperationBuilder validateJsonByKey(final K fieldName,
+													  final V expectedValue) {
+			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
+			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
+
+			return this.addValidation(ValidationType.JSON_BY_KEY, Pair.of(fieldName, expectedValue));
 		}
 
 		public <K, V> OperationBuilder addValidation(final ValidationType validationType,

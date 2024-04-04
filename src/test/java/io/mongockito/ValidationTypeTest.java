@@ -123,8 +123,50 @@ class ValidationTypeTest {
 
 		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
-
 		assertThatThrownBy(() -> ValidationType.JSON.validate(doc, Pair.of(simpleEntityExample, null)))
+			.isInstanceOf(AssertionError.class);
+	}
+
+	@Test
+	void should_validate_a_part_of_json() {
+
+		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
+
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
+
+		ValidationType.JSON_BY_KEY.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap()));
+
+	}
+
+	@Test
+	void should_fail_on_validate_a_part_of_json_with_null_expected_value() {
+
+		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
+
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
+
+		assertThatThrownBy(() -> ValidationType.JSON_BY_KEY.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, null)))
+			.isInstanceOf(AssertionError.class);
+	}
+
+	@Test
+	void should_fail_on_validate_a_part_of_modified_json() {
+
+		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
+		final EntityExample simpleEntityExample = EntityExampleObjectMother.createEntityExampleWithoutMap()
+			.toBuilder().entityExampleMap(
+				Map.of("A", EntityExample.builder()
+					.id(ID_FILED_OTHER)
+					.locked(Boolean.FALSE)
+					.creationUser("User_1")
+					.lastUpdateUser("User_2")
+					.build()
+				)).build();
+
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
+
+		assertThatThrownBy(() -> ValidationType.JSON_BY_KEY
+			.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, simpleEntityExample.getEntityExampleMap())))
 			.isInstanceOf(AssertionError.class);
 	}
 

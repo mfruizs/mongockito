@@ -1,4 +1,4 @@
-package io.mongockito.util.json.adapters;
+package io.mongockito.util.json.model;
 
 import java.lang.reflect.Type;
 import lombok.Builder;

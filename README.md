@@ -41,13 +41,14 @@ we can validate that the fields sent to mongodb are the expected ones.
 
 ### ValidationType
 
-| Validation | Description                                                                           |
-|:-----------|:--------------------------------------------------------------------------------------|
-| EQUALS     | Validates that the value of a field is as expected                                    |
-| NOT_NULL   | Validates that the field is not null                                                  |
-| NULL       | Validates that the field is null                                                      |
-| MAP_SIZE   | Validates that map has expected number of elements                                    |
-| JSON       | Validates that the json to be inserted in the collection is equal to the input object |
+| Validation  | Description                                                                                 |
+|:------------|:--------------------------------------------------------------------------------------------|
+| EQUALS      | Validates that the value of a field is as expected                                          |
+| NOT_NULL    | Validates that the field is not null                                                        |
+| NULL        | Validates that the field is null                                                            |
+| MAP_SIZE    | Validates that map has expected number of elements                                          |
+| JSON        | Validates that the json to be inserted in the collection is equal to the input object       |
+| JSON_BY_KEY | Validate that a part of json to be inserted in the collection is equal to comparable object |
 
 ## Examples:
 
@@ -122,6 +123,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
         .validateJson(entityExample)
+        .validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
         .validateNull(NULLABLE_VALUE_FIELD)
         .validateNotNull(DEFAULT_KEY_ID)
         .validateEquals(DEFAULT_KEY_ID, entityExample.getId())

@@ -21,7 +21,8 @@ import static org.mockito.Mockito.times;
 
 import io.mongockito.Verify.OperationBuilder;
 import io.mongockito.common.model.EntityExample;
-import io.mongockito.util.json.adapters.Adapter;
+import io.mongockito.model.ValidateField;
+import io.mongockito.util.json.model.Adapter;
 import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
 import io.mongockito.util.json.adapters.ObjectIdAdapter;
 import java.time.LocalDateTime;
@@ -193,6 +194,7 @@ class VerifyTest {
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
 			.validateJson(entityExample)
+			.validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
 			.validateNull(NULLABLE_VALUE_FIELD)
 			.validateNotNull(DEFAULT_KEY_ID)
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
