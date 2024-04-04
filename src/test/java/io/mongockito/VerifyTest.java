@@ -1,10 +1,6 @@
 package io.mongockito;
 
 import static io.mongockito.Operation.SAVE;
-import static io.mongockito.common.EntityExampleObjectMother.DATE_NOW;
-import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
-import static io.mongockito.common.EntityExampleObjectMother.MONTH_VALUE_01;
-import static io.mongockito.common.EntityExampleObjectMother.createEntityExample;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
@@ -12,16 +8,19 @@ import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
 import static io.mongockito.common.TestConstants.NULLABLE_VALUE_FIELD;
 import static io.mongockito.common.TestConstants.OPERATION_FIND_BY_ID;
+import static io.mongockito.common.business.EntityExampleObjectMother.DATE_NOW;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
+import static io.mongockito.common.business.EntityExampleObjectMother.MONTH_VALUE_01;
+import static io.mongockito.common.business.EntityExampleObjectMother.createEntityExample;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 
 import io.mongockito.Verify.OperationBuilder;
-import io.mongockito.common.EntityExample;
+import io.mongockito.common.model.EntityExample;
 import io.mongockito.util.json.adapters.Adapter;
 import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
 import io.mongockito.util.json.adapters.ObjectIdAdapter;
@@ -198,7 +197,7 @@ class VerifyTest {
 			.validateNotNull(DEFAULT_KEY_ID)
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
 			.validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
-			.verify(this.mongoTemplate);;
+			.verify(this.mongoTemplate);
 	}
 
 

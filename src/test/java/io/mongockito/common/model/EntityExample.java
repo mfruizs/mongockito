@@ -1,4 +1,4 @@
-package io.mongockito.common;
+package io.mongockito.common.model;
 
 import java.time.LocalDateTime;
 import java.util.Map;

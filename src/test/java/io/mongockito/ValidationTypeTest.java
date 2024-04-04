@@ -1,15 +1,15 @@
 package io.mongockito;
 
-import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
-import static io.mongockito.common.EntityExampleObjectMother.ID_FILED_OTHER;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FILED_OTHER;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
 import static io.mongockito.util.json.JsonTool.gsonBuilder;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
-import io.mongockito.common.EntityExample;
-import io.mongockito.common.EntityExampleObjectMother;
+import io.mongockito.common.model.EntityExample;
+import io.mongockito.common.business.EntityExampleObjectMother;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bson.Document;

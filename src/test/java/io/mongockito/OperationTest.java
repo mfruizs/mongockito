@@ -1,7 +1,7 @@
 package io.mongockito;
 
-import static io.mongockito.common.EntityExampleObjectMother.ID_FIELD;
-import static io.mongockito.common.EntityExampleObjectMother.MONTH_VALUE_01;
+import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
+import static io.mongockito.common.business.EntityExampleObjectMother.MONTH_VALUE_01;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
@@ -11,8 +11,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.springframework.data.mongodb.core.query.Criteria.where;
 
-import io.mongockito.common.EntityExample;
-import io.mongockito.common.EntityExampleObjectMother;
+import io.mongockito.common.model.EntityExample;
+import io.mongockito.common.business.EntityExampleObjectMother;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.junit.jupiter.api.Test;

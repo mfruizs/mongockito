@@ -1,7 +1,8 @@
-package io.mongockito.common;
+package io.mongockito.common.business;
 
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 
+import io.mongockito.common.model.EntityExample;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.bson.types.ObjectId;
