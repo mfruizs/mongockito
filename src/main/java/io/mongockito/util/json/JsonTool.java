@@ -4,7 +4,7 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import io.mongockito.util.json.adapters.Adapter;
+import io.mongockito.util.json.model.Adapter;
 import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
 import io.mongockito.util.json.adapters.ObjectIdAdapter;
 import java.time.LocalDateTime;

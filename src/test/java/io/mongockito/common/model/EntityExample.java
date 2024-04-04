@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 @Value
-@Builder
+@Builder(toBuilder = true)
 @Document("example")
 public class EntityExample {
 

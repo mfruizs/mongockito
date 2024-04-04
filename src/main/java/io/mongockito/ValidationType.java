@@ -59,13 +59,34 @@ public enum ValidationType {
 
 			if (pair.getKey() == null) {
 				fail("Mandatory object on first pair parameter");
+				return;
 			}
 
-			final Class<?>  clazz = pair.getKey().getClass();
+			final Class<?> clazz = pair.getKey().getClass();
 			final Object expectedObject = pair.getKey();
 			final Object currentDocument = gsonBuilder().fromJson(document.toJson(), clazz);
 
 			assertEquals(currentDocument, expectedObject);
+		}
+
+	},
+
+	JSON_BY_KEY {
+		@Override
+		public void validate(final Document document, final Pair<?, ?> pair) {
+
+			final Object fieldName = pair.getKey();
+			final Object expectedValue = pair.getValue();
+
+			if (fieldName == null || expectedValue == null) {
+				fail("Mandatory fieldName or ClassType on pair");
+				return;
+			}
+
+			final Document currentDocument = (Document) document.get(fieldName);
+			final String actualValue = currentDocument.toJson().replaceAll("\\s+", "");
+			final String expectedItem = gsonBuilder().toJson(expectedValue);
+			assertEquals(expectedItem, actualValue);
 		}
 	};
 
