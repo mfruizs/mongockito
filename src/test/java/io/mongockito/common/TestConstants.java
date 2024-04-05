@@ -12,6 +12,7 @@ public class TestConstants {
 	public static final String FIELD_MONTH = "month";
 	public static final String FIELD_LAST_UPDATE_TIMESTAMP = "lastUpdateTimestamp";
 	public static final String ENTITY_EXAMPLE_MAP = "entityExampleMap";
+	public static final String ENTITY_EXAMPLE_LIST = "entityExampleList";
 	public static final String NULLABLE_VALUE_FIELD = "nullableValue";
 
 }

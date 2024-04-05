@@ -4,6 +4,7 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 
 import io.mongockito.common.model.EntityExample;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import org.bson.types.ObjectId;
 
@@ -35,6 +36,7 @@ public class EntityExampleObjectMother {
 			.lastUpdateUser("User_b")
 			.lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
 			.entityExampleMap(createFieldMap())
+			.entityExampleList(createFieldList())
 			.build();
 
 	}
@@ -53,12 +55,26 @@ public class EntityExampleObjectMother {
 			"A", EntityExample.builder().id(ID_FILED_OTHER).month(MONTH_VALUE_01)
 				.locked(Boolean.FALSE).creationUser("User_1").creationTimestamp(DATE_NOW).lastUpdateUser("User_2")
 				.lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
-
 				.build(),
 			"B", EntityExample.builder().id(ID_FILED_OTHER).month(MONTH_VALUE_02)
 				.locked(Boolean.FALSE).creationUser("User_3").creationTimestamp(DATE_NOW).lastUpdateUser("User_4")
 				.lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
 				.build());
+	}
+
+	public static List<EntityExample> createFieldList() {
+
+		return List.of(EntityExample.builder().id(ID_FILED_OTHER).month(MONTH_VALUE_01)
+						   .locked(Boolean.FALSE).creationUser("User_1").creationTimestamp(DATE_NOW).lastUpdateUser("User_2")
+						   .lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
+						   .build(),
+					   EntityExample.builder().id(ID_FILED_OTHER).month(MONTH_VALUE_02)
+						   .locked(Boolean.FALSE).creationUser("User_3").creationTimestamp(DATE_NOW).lastUpdateUser("User_4")
+						   .lastUpdateTimestamp(DATE_NOW.plusDays(INTEGER_ONE))
+						   .build()
+
+		);
+
 	}
 
 

@@ -1,5 +1,6 @@
 package io.mongockito;
 
+import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_LIST;
 import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
 import static io.mongockito.common.business.EntityExampleObjectMother.ID_FILED_OTHER;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
@@ -10,6 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 
 import io.mongockito.common.model.EntityExample;
 import io.mongockito.common.business.EntityExampleObjectMother;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.bson.Document;
@@ -91,7 +93,7 @@ class ValidationTypeTest {
 
 		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
-		ValidationType.MAP_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, entityExampleFieldMap.size()));
+		ValidationType.COLLECTION_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, entityExampleFieldMap.size()));
 	}
 
 	@Test
@@ -101,7 +103,29 @@ class ValidationTypeTest {
 
 		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
 
-		assertThatThrownBy(() -> ValidationType.MAP_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, INTEGER_ONE)))
+		assertThatThrownBy(() -> ValidationType.COLLECTION_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_MAP, INTEGER_ONE)))
+			.isInstanceOf(AssertionError.class);
+	}
+
+	@Test
+	void should_validate_list_size_operation_correctly() {
+
+		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
+		final List<EntityExample> entityExampleFieldList = entityExample.getEntityExampleList();
+
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
+
+		ValidationType.COLLECTION_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_LIST, entityExampleFieldList.size()));
+	}
+
+	@Test
+	void should_throw_error_on_validating_list_size_operation() {
+
+		final EntityExample entityExample = EntityExampleObjectMother.createEntityExample();
+
+		final Document doc = Document.parse(gsonBuilder().toJson(entityExample));
+
+		assertThatThrownBy(() -> ValidationType.COLLECTION_SIZE.validate(doc, Pair.of(ENTITY_EXAMPLE_LIST, INTEGER_ONE)))
 			.isInstanceOf(AssertionError.class);
 	}
 
