@@ -127,7 +127,7 @@ and will check that the attached fields have been sent to the DB as intended.
         .validateNull(NULLABLE_VALUE_FIELD)
         .validateNotNull(DEFAULT_KEY_ID)
         .validateEquals(DEFAULT_KEY_ID, entityExample.getId())
-        .validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
+        .validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
         .verify( <mongoTemplate> );
 	
 ```

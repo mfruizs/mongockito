@@ -2,6 +2,7 @@ package io.mongockito;
 
 import static io.mongockito.Operation.SAVE;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
+import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_LIST;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
@@ -198,7 +199,7 @@ class VerifyTest {
 			.validateNull(NULLABLE_VALUE_FIELD)
 			.validateNotNull(DEFAULT_KEY_ID)
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
-			.validateMapSize(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap().size())
+			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
 			.verify(this.mongoTemplate);
 	}
 

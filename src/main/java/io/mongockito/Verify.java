@@ -122,8 +122,8 @@ public class Verify {
 			return this.addValidation(ValidationType.NOT_NULL, fieldName);
 		}
 
-		public <K, V> OperationBuilder validateMapSize(final K fieldName,
-													  final V expectedSize) {
+		public <K, V> OperationBuilder validateCollectionSize(final K fieldName,
+															  final V expectedSize) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedSize, MANDATORY_EXPECTED_SIZE);
