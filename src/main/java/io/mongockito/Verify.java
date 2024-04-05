@@ -128,7 +128,7 @@ public class Verify {
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedSize, MANDATORY_EXPECTED_SIZE);
 
-			return this.addValidation(ValidationType.MAP_SIZE, Pair.of(fieldName, expectedSize));
+			return this.addValidation(ValidationType.COLLECTION_SIZE, Pair.of(fieldName, expectedSize));
 		}
 
 		public <K> OperationBuilder validateJson(final K expectedValue) {

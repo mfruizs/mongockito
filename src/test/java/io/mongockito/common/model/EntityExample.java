@@ -1,6 +1,7 @@
 package io.mongockito.common.model;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import lombok.Builder;
 import lombok.Value;
@@ -34,5 +35,7 @@ public class EntityExample {
 	LocalDateTime lastUpdateTimestamp;
 
 	Map<String, EntityExample> entityExampleMap;
+
+	List<EntityExample> entityExampleList;
 
 }
