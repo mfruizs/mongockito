@@ -1,5 +1,6 @@
 package io.mongockito;
 
+import static io.micrometer.common.util.StringUtils.isNotBlank;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -34,6 +35,7 @@ public class Verify {
 	private static final String MANDATORY_EXPECTED_SIZE = "mandatory field: Map Size";
 	private static final String MANDATORY_FIELD_EXPECTED_VALUE = "mandatory field: expectedValue";
 	private static final String MANDATORY_FIELD_VERIFICATION_MODE = "mandatory field: Verification Mode";
+	private static final String MANDATORY_FIELD_COLLECTION_NAME = "mandatory field: CollectionCame";
 
 	Operation operation;
 	Class<?> clazz;
@@ -41,6 +43,7 @@ public class Verify {
 	List<Adapter> adapters;
 	boolean allowNulls;
 	VerificationMode verificationMode;
+	String collectionName;
 
 	Verify(final OperationBuilder builder) {
 
@@ -50,6 +53,7 @@ public class Verify {
 		this.adapters = builder.adapters;
 		this.allowNulls = builder.allowNulls;
 		this.verificationMode = builder.verificationMode;
+		this.collectionName = builder.collectionName;
 	}
 
 	public static OperationBuilder builder() {
@@ -65,7 +69,8 @@ public class Verify {
 		List<ValidateField> fields;
 		List<Adapter> adapters;
 		boolean allowNulls = true;
-		private VerificationMode verificationMode = times(1);
+		VerificationMode verificationMode = times(1);
+		String collectionName;
 
 		OperationBuilder() {
 
@@ -89,6 +94,14 @@ public class Verify {
 			assertNotNull(clazz, MANDATORY_CLASS);
 
 			this.clazz = clazz;
+			return this;
+		}
+
+		public OperationBuilder addCollectionName(final String collectionName) {
+
+			assertNotNull(collectionName, MANDATORY_FIELD_COLLECTION_NAME);
+
+			this.collectionName = collectionName;
 			return this;
 		}
 
@@ -197,7 +210,7 @@ public class Verify {
 			JsonTool.addAdapters(this.adapters);
 			JsonTool.allowSerializeNulls(this.allowNulls);
 
-			final Document document = this.operation.execute(mongoTemplate, this.clazz, this.verificationMode);
+			final Document document = this.execute(mongoTemplate);
 
 			this.fields.forEach(field -> field.getValidationType().validate(document, field.getField()));
 
@@ -217,6 +230,16 @@ public class Verify {
 			if (this.fields == null) {
 				this.fields = Collections.emptyList();
 			}
+		}
+
+		private Document execute(final MongoTemplate mongoTemplate) {
+
+			if (isNotBlank(this.collectionName)) {
+				return this.operation.execute(mongoTemplate, this.clazz, this.verificationMode, this.collectionName);
+			}
+
+			return this.operation.execute(mongoTemplate, this.clazz, this.verificationMode);
+
 		}
 	}
 }

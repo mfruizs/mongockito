@@ -25,6 +25,10 @@ we can validate that the fields sent to mongodb are the expected ones.
     </dependency>
 ```
 
+> **NOTE:** I have not yet uploaded the version to the repository, you must compile the project to generate the dependency.
+> 
+> Sorry for the inconvenience!
+
 ## Validations
 
 ### Operation
@@ -122,6 +126,7 @@ and will check that the attached fields have been sent to the DB as intended.
     Verify.builder()
         .addOperation( Operation.SAVE )
         .addClass( EntityExample.class )
+        .addCollectionName( "example_collection_name" )
         .validateJson(entityExample)
         .validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
         .validateNull(NULLABLE_VALUE_FIELD)

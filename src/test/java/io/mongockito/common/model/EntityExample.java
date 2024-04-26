@@ -1,5 +1,7 @@
 package io.mongockito.common.model;
 
+import static io.mongockito.common.TestConstants.EXAMPLE_COLLECTION_NAME;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -11,7 +13,7 @@ import org.springframework.data.mongodb.core.mapping.Field;
 
 @Value
 @Builder(toBuilder = true)
-@Document("example")
+@Document(EXAMPLE_COLLECTION_NAME)
 public class EntityExample {
 
 	@Id

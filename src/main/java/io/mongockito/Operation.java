@@ -20,6 +20,16 @@ public enum Operation {
 			verify(mongoTemplate, verificationMode).find(queryCaptor.capture(), eq(clazz));
 			return queryCaptor.getValue().getQueryObject();
 		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).find(queryCaptor.capture(), eq(clazz), eq(collectionName));
+			return queryCaptor.getValue().getQueryObject();
+		}
 	},
 
 	FIND_ONE {
@@ -27,6 +37,16 @@ public enum Operation {
 		public Document execute(final MongoTemplate mongoTemplate, final Class<?> clazz, final VerificationMode verificationMode) {
 
 			verify(mongoTemplate, verificationMode).findOne(queryCaptor.capture(), eq(clazz));
+			return queryCaptor.getValue().getQueryObject();
+		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).findOne(queryCaptor.capture(), eq(clazz), eq(collectionName));
 			return queryCaptor.getValue().getQueryObject();
 		}
 	},
@@ -38,6 +58,16 @@ public enum Operation {
 			verify(mongoTemplate, verificationMode).findById(stringCaptor.capture(), eq(clazz));
 			return new Document(DEFAULT_KEY_ID, stringCaptor.getValue());
 		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).findById(stringCaptor.capture(), eq(clazz), eq(collectionName));
+			return new Document(DEFAULT_KEY_ID, stringCaptor.getValue());
+		}
 	},
 
 	FIND_AND_REMOVE {
@@ -45,6 +75,16 @@ public enum Operation {
 		public Document execute(final MongoTemplate mongoTemplate, final Class<?> clazz, final VerificationMode verificationMode) {
 
 			verify(mongoTemplate, verificationMode).findAndRemove(queryCaptor.capture(), eq(clazz));
+			return queryCaptor.getValue().getQueryObject();
+		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).findAndRemove(queryCaptor.capture(), eq(clazz), eq(collectionName));
 			return queryCaptor.getValue().getQueryObject();
 		}
 	},
@@ -57,6 +97,19 @@ public enum Operation {
 			return recoverFieldsFromQueryAndUpdateCaptors();
 
 		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).updateFirst(queryCaptor.capture(),
+																updateCaptor.capture(),
+																eq(clazz),
+																eq(collectionName));
+			return recoverFieldsFromQueryAndUpdateCaptors();
+		}
 	},
 
 	UPDATE_MULTI {
@@ -66,6 +119,19 @@ public enum Operation {
 			verify(mongoTemplate, verificationMode).updateMulti(queryCaptor.capture(), updateCaptor.capture(), eq(clazz));
 			return recoverFieldsFromQueryAndUpdateCaptors();
 
+		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).updateMulti(queryCaptor.capture(),
+																updateCaptor.capture(),
+																eq(clazz),
+																eq(collectionName));
+			return recoverFieldsFromQueryAndUpdateCaptors();
 		}
 	},
 
@@ -77,6 +143,19 @@ public enum Operation {
 			return recoverFieldsFromQueryAndUpdateCaptors();
 
 		}
+
+		@Override
+		public Document execute(final MongoTemplate mongoTemplate,
+								final Class<?> clazz,
+								final VerificationMode verificationMode,
+								final String collectionName) {
+
+			verify(mongoTemplate, verificationMode).upsert(queryCaptor.capture(),
+														   updateCaptor.capture(),
+														   eq(clazz),
+														   eq(collectionName));
+			return recoverFieldsFromQueryAndUpdateCaptors();
+		}
 	},
 
 	SAVE {
@@ -85,6 +164,17 @@ public enum Operation {
 
 			final ArgumentCaptor<?> saveCaptor = ArgumentCaptor.forClass(clazz);
 			verify(mongoTemplate, verificationMode).save(saveCaptor.capture());
+			return Document.parse(gsonBuilder().toJson(saveCaptor.getValue()));
+		}
+
+		@Override
+		public Document execute(MongoTemplate mongoTemplate,
+								Class<?> clazz,
+								VerificationMode verificationMode,
+								String collectionName) {
+
+			final ArgumentCaptor<?> saveCaptor = ArgumentCaptor.forClass(clazz);
+			verify(mongoTemplate, verificationMode).save(saveCaptor.capture(), eq(collectionName));
 			return Document.parse(gsonBuilder().toJson(saveCaptor.getValue()));
 		}
 	};
@@ -105,5 +195,10 @@ public enum Operation {
 	private static final ArgumentCaptor<String> stringCaptor = ArgumentCaptor.forClass(String.class);
 
 	public abstract Document execute(MongoTemplate mongoTemplate, Class<?> clazz, VerificationMode verificationMode);
+
+	public abstract Document execute(MongoTemplate mongoTemplate,
+									 Class<?> clazz,
+									 VerificationMode verificationMode,
+									 String collectionName);
 
 }
