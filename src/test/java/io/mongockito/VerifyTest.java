@@ -4,6 +4,7 @@ import static io.mongockito.Operation.SAVE;
 import static io.mongockito.common.TestConstants.DEFAULT_KEY_ID;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_LIST;
 import static io.mongockito.common.TestConstants.ENTITY_EXAMPLE_MAP;
+import static io.mongockito.common.TestConstants.EXAMPLE_COLLECTION_NAME;
 import static io.mongockito.common.TestConstants.FIELD_LAST_UPDATE_TIMESTAMP;
 import static io.mongockito.common.TestConstants.FIELD_LOCKED;
 import static io.mongockito.common.TestConstants.FIELD_MONTH;
@@ -191,6 +192,32 @@ class VerifyTest {
 		Verify.builder()
 			.addOperation(SAVE)
 			.addClass(EntityExample.class)
+			.allowSerializeNulls(true)
+			.addAdapter(ObjectId.class, objectIdAdapter)
+			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
+			.validateJson(entityExample)
+			.validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
+			.validateNull(NULLABLE_VALUE_FIELD)
+			.validateNotNull(DEFAULT_KEY_ID)
+			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
+			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
+			.verify(this.mongoTemplate);
+	}
+
+
+	@Test
+	void should_verify_all_validation_type_correctly_with_add_specified_collection_name() {
+
+		final EntityExample entityExample = createEntityExample();
+		final ObjectIdAdapter objectIdAdapter = new ObjectIdAdapter();
+		final LocalDateTimeAdapter localDateTimeAdapter = new LocalDateTimeAdapter();
+
+		this.mongoTemplate.save(entityExample, EXAMPLE_COLLECTION_NAME);
+
+		Verify.builder()
+			.addOperation(SAVE)
+			.addClass(EntityExample.class)
+			.addCollectionName(EXAMPLE_COLLECTION_NAME)
 			.allowSerializeNulls(true)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)

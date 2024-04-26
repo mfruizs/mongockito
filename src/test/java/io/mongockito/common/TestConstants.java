@@ -14,5 +14,6 @@ public class TestConstants {
 	public static final String ENTITY_EXAMPLE_MAP = "entityExampleMap";
 	public static final String ENTITY_EXAMPLE_LIST = "entityExampleList";
 	public static final String NULLABLE_VALUE_FIELD = "nullableValue";
+	public static final String EXAMPLE_COLLECTION_NAME = "example";
 
 }
