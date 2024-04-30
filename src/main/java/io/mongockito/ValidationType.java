@@ -48,7 +48,7 @@ public enum ValidationType {
 			final Object fieldName = pair.getKey();
 			final Integer expectedSize = (Integer) pair.getValue();
 
-			int currentSize = DocumentUtility.obtainCollectionLength(document, fieldName);
+			final int currentSize = DocumentUtility.obtainCollectionLength(document, fieldName);
 			assertEquals(expectedSize, currentSize);
 		}
 	},
@@ -84,10 +84,23 @@ public enum ValidationType {
 			}
 
 			final Document currentDocument = (Document) document.get(fieldName);
-			final String actualValue = currentDocument.toJson().replaceAll("\\s+", "");
-			final String expectedItem = gsonBuilder().toJson(expectedValue);
+			final String actualValue = this.obtainFormattedCurrentValue(currentDocument);
+			final String expectedItem = this.obtainFormattedExpectedItem(expectedValue);
 			assertEquals(expectedItem, actualValue);
 		}
+
+		private String obtainFormattedCurrentValue(final Document currentDocument) {
+
+			return currentDocument.toJson().replaceAll("\\s+", "");
+		}
+
+		private String obtainFormattedExpectedItem(final Object expectedValue) {
+
+			return gsonBuilder().toJson(expectedValue)
+				.replaceAll("^\"|\"$", "")
+				.replace("\\\"", "\"");
+		}
+
 	};
 
 	public abstract void validate(Document document, Pair<?, ?> pair);

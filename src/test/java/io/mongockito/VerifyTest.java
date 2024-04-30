@@ -11,6 +11,7 @@ import static io.mongockito.common.TestConstants.FIELD_MONTH;
 import static io.mongockito.common.TestConstants.NULLABLE_VALUE_FIELD;
 import static io.mongockito.common.TestConstants.OPERATION_FIND_BY_ID;
 import static io.mongockito.common.business.EntityExampleObjectMother.DATE_NOW;
+import static io.mongockito.common.business.EntityExampleObjectMother.DELETED_FIELD;
 import static io.mongockito.common.business.EntityExampleObjectMother.ID_FIELD;
 import static io.mongockito.common.business.EntityExampleObjectMother.MONTH_VALUE_01;
 import static io.mongockito.common.business.EntityExampleObjectMother.createEntityExample;
@@ -20,13 +21,14 @@ import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.times;
+import static org.springframework.data.mongodb.core.query.Criteria.where;
 
 import io.mongockito.Verify.OperationBuilder;
 import io.mongockito.common.model.EntityExample;
 import io.mongockito.model.ValidateField;
-import io.mongockito.util.json.model.Adapter;
 import io.mongockito.util.json.adapters.LocalDateTimeAdapter;
 import io.mongockito.util.json.adapters.ObjectIdAdapter;
+import io.mongockito.util.json.model.Adapter;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
@@ -38,6 +40,7 @@ import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.verification.VerificationMode;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 
 @ExtendWith(MockitoExtension.class)
 class VerifyTest {
@@ -228,6 +231,32 @@ class VerifyTest {
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
 			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
 			.verify(this.mongoTemplate);
+	}
+
+	@Test
+	void should_validate_find_operation_with_operators() {
+
+		final String startId = "20190107";
+		final String lastId = "20190108";
+
+		final String expectedValue = "{\"$gte\":\"20190107\",\"$lt\":\"20190108\"}";
+		final String expectedValueOnDelete = "{\"$ne\":true}";
+
+		final Query query = new Query();
+		query.addCriteria(where(ID_FIELD).gte(startId).lt(lastId));
+		query.addCriteria(where(DELETED_FIELD).ne(true));
+
+		this.mongoTemplate.find(query, EntityExample.class);
+
+		Verify.builder()
+			.addOperation(Operation.FIND)
+			.addVerificationMode(times(INTEGER_ONE))
+			.addClass(EntityExample.class)
+			.validateJsonByKey(ID_FIELD, expectedValue)
+			.validateJsonByKey(DELETED_FIELD, expectedValueOnDelete)
+			.allowSerializeNulls(false)
+			.verify(this.mongoTemplate);
+
 	}
 
 
