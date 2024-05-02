@@ -85,7 +85,7 @@ public enum ValidationType {
 
 			final Document currentDocument = (Document) document.get(fieldName);
 			final String actualValue = this.obtainFormattedCurrentValue(currentDocument);
-			final String expectedItem = this.obtainFormattedExpectedItem(expectedValue);
+			final String expectedItem = this.obtainFormattedExpectedValue(expectedValue);
 			assertEquals(expectedItem, actualValue);
 		}
 
@@ -94,7 +94,7 @@ public enum ValidationType {
 			return currentDocument.toJson().replaceAll("\\s+", "");
 		}
 
-		private String obtainFormattedExpectedItem(final Object expectedValue) {
+		private String obtainFormattedExpectedValue(final Object expectedValue) {
 
 			return gsonBuilder().toJson(expectedValue)
 				.replaceAll("^\"|\"$", "")
