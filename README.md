@@ -25,9 +25,13 @@ we can validate that the fields sent to mongodb are the expected ones.
     </dependency>
 ```
 
-> **NOTE:** I have not yet uploaded the version to the repository, you must compile the project to generate the dependency.
-> 
-> Sorry for the inconvenience!
+### Releases:
+
+* [Mongockito release packages](https://github.com/mfruizs/mongockito/packages)
+
+| Release      | Date     | Information   |
+|:-------------|----------|---------------|
+| 1.0-SNAPSHOT | 2-may-24 | First release |
 
 ## Validations
 
