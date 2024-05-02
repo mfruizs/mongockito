@@ -17,6 +17,8 @@ public class EntityExampleObjectMother {
 	public static final String MONTH_VALUE_01 = "01";
 	public static final String MONTH_VALUE_02 = "02";
 
+	public static final String DELETED_FIELD = "deleteField";
+
 	public static EntityExample createSimpleEntityExample() {
 
 		return EntityExample.builder()
