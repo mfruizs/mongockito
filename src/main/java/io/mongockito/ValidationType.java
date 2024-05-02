@@ -84,9 +84,9 @@ public enum ValidationType {
 			}
 
 			final Document currentDocument = (Document) document.get(fieldName);
-			final String actualValue = this.obtainFormattedCurrentValue(currentDocument);
+			final String currentValue = this.obtainFormattedCurrentValue(currentDocument);
 			final String expectedItem = this.obtainFormattedExpectedValue(expectedValue);
-			assertEquals(expectedItem, actualValue);
+			assertEquals(expectedItem, currentValue);
 		}
 
 		private String obtainFormattedCurrentValue(final Document currentDocument) {
