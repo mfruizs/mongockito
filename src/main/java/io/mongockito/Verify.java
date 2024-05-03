@@ -3,7 +3,9 @@ package io.mongockito;
 import static io.micrometer.common.util.StringUtils.isNotBlank;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
+import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 
 import io.mongockito.model.ValidateField;
@@ -36,6 +38,7 @@ public class Verify {
 	private static final String MANDATORY_FIELD_EXPECTED_VALUE = "mandatory field: expectedValue";
 	private static final String MANDATORY_FIELD_VERIFICATION_MODE = "mandatory field: Verification Mode";
 	private static final String MANDATORY_FIELD_COLLECTION_NAME = "mandatory field: CollectionCame";
+	public static final String TOO_MANY_PARAMETERS = "Too many parameters";
 
 	Operation operation;
 	Class<?> clazz;
@@ -157,6 +160,19 @@ public class Verify {
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON_BY_KEY, Pair.of(fieldName, expectedValue));
+		}
+
+		public OperationBuilder validate(final ValidationType validationType, Object... values) {
+
+			assertNotNull(values, MANDATORY_FIELD_NAME);
+			assertTrue(values.length <= INTEGER_TWO, TOO_MANY_PARAMETERS);
+
+
+			if (values.length == INTEGER_ONE) {
+				return this.addValidation(validationType, Pair.of(values[0], null));
+			}
+
+			return this.addValidation(validationType, Pair.of(values[0], values[1]));
 		}
 
 		private <K> OperationBuilder addValidation(final ValidationType type, final K fieldName) {

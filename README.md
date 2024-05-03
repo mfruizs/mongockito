@@ -70,6 +70,16 @@ we can validate that the fields sent to mongodb are the expected ones.
 |      validateJson      |      JSON       |
 |   validateJsonByKey    |   JSON_BY_KEY   |
 
+> NOTE: all this functions can be replaced by one single function with parameters, 
+> see [VerifyTest](./src/test/java/io/mongockito/VerifyTest.java) class for more examples
+
+```java
+    // use this
+    .validate(ValidationType.NULL, NULLABLE_FIELD_NAME)
+    // instead of him own method
+    .validateNull(NULLABLE_FIELD_NAME)
+```
+
 
 ### Other configuration attributes
 
