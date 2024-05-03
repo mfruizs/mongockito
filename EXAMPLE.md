@@ -71,14 +71,14 @@ public class MongoRepository {
 
 * All tests necessary to validate these operations.
 
-|   Simplified Method    | ValidationType  |
-|:----------------------:|:---------------:|
-|     validateEquals     |     EQUALS      |
-|    validateNotNull     |    NOT_NULL     |
-|      validateNull      |      NULL       |
-| validateCollectionSize | COLLECTION_SIZE |
-|      validateJson      |      JSON       |
-|   validateJsonByKey    |   JSON_BY_KEY   |
+|    Simplified Method    | ValidationType  |
+|:-----------------------:|:---------------:|
+|     validatesEquals     |     EQUALS      |
+|    validatesNotNull     |    NOT_NULL     |
+|      validatesNull      |      NULL       |
+| validatesCollectionSize | COLLECTION_SIZE |
+|      validatesJson      |      JSON       |
+|   validatesJsonByKey    |   JSON_BY_KEY   |
 
 
 ```java
@@ -106,7 +106,7 @@ class MongoRepositoryTest {
         Verify.that()
             .thisOperation( Operation.FIND_ONE )
             .ofClass( MyEntity.class )
-            .validateEquals( DEFAULT_KEY_ID, ID_FIELD )
+            .validatesEquals( DEFAULT_KEY_ID, ID_FIELD )
             .run( this.mongoTemplate );
     
     }
@@ -119,7 +119,7 @@ class MongoRepositoryTest {
         assertThatThrownBy(() -> Verify.that()
             .thisOperation( Operation.FIND_ONE )
             .ofClass( MyEntity.class )
-            .validateNotNull( DEFAULT_KEY_ID )
+            .validatesNotNull( DEFAULT_KEY_ID )
             .run( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
     
@@ -140,8 +140,8 @@ class MongoRepositoryTest {
         Verify.that()
             .thisOperation(Operation.SAVE)
             .ofClass( MyEntity.class )
-            .validateJson( myEntity )
-            .validateEquals( "active", true )
+            .validatesJson( myEntity )
+            .validatesEquals( "active", true )
             .run( this.mongoTemplate );
     
     }
@@ -161,9 +161,9 @@ class MongoRepositoryTest {
         Verify.that()
             .thisOperation(Operation.SAVE)
             .ofClass( MyEntity.class )
-            .validateEquals( "fooCode", "bar" )
-            .validateNotNull( "desc" )
-            .validateEquals( "active", true )
+            .validatesEquals( "fooCode", "bar" )
+            .validatesNotNull( "desc" )
+            .validatesEquals( "active", true )
             .run( this.mongoTemplate );
     
     }
@@ -184,7 +184,7 @@ class MongoRepositoryTest {
         assertThatThrownBy(() -> Verify.that()
             .thisOperation(Operation.SAVE)
             .ofClass( MyEntity.class )
-            .validateEquals( "active", false )
+            .validatesEquals( "active", false )
             .addVerificationMode(times(INTEGER_ONE))
             .run( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
@@ -215,7 +215,7 @@ class MongoRepositoryTest {
         Verify.that()
             .thisOperation(Operation.SAVE)
             .ofClass( MyEntity.class )
-            .validateJson( myEntity )
+            .validatesJson( myEntity )
             .addAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .run( this.mongoTemplate );
     

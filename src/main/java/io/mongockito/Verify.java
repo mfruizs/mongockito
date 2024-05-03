@@ -116,30 +116,30 @@ public class Verify {
 			return this;
 		}
 
-		public <K, V> OperationBuilder validateEquals(final K fieldName,
-													 final V expectedValue) {
+		public <K, V> OperationBuilder validatesEquals(final K fieldName,
+													   final V expectedValue) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.EQUALS, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K> OperationBuilder validateNull(final K fieldName) {
+		public <K> OperationBuilder validatesNull(final K fieldName) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.NULL, fieldName);
 		}
 
-		public <K> OperationBuilder validateNotNull(final K fieldName) {
+		public <K> OperationBuilder validatesNotNull(final K fieldName) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.NOT_NULL, fieldName);
 		}
 
-		public <K, V> OperationBuilder validateCollectionSize(final K fieldName,
-															  final V expectedSize) {
+		public <K, V> OperationBuilder validatesCollectionSize(final K fieldName,
+															   final V expectedSize) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedSize, MANDATORY_EXPECTED_SIZE);
@@ -147,22 +147,22 @@ public class Verify {
 			return this.addValidation(ValidationType.COLLECTION_SIZE, Pair.of(fieldName, expectedSize));
 		}
 
-		public <K> OperationBuilder validateJson(final K expectedValue) {
+		public <K> OperationBuilder validatesJson(final K expectedValue) {
 
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON, expectedValue);
 		}
 
-		public <K, V> OperationBuilder validateJsonByKey(final K fieldName,
-													  final V expectedValue) {
+		public <K, V> OperationBuilder validatesJsonByKey(final K fieldName,
+														  final V expectedValue) {
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON_BY_KEY, Pair.of(fieldName, expectedValue));
 		}
 
-		public OperationBuilder validate(final ValidationType validationType, Object... values) {
+		public OperationBuilder validates(final ValidationType validationType, Object... values) {
 
 			assertNotNull(values, MANDATORY_FIELD_NAME);
 			assertTrue(values.length <= INTEGER_TWO, TOO_MANY_PARAMETERS);

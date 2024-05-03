@@ -56,12 +56,12 @@ class VerifyTest {
 
 		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
 			.ofClass(EntityExample.class)
-			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
-			.validateEquals(FIELD_LOCKED, true)
-			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
-			.validate(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
-			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
-			.validate(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
+			.validatesEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validatesEquals(FIELD_LOCKED, true)
+			.validatesEquals(FIELD_MONTH, MONTH_VALUE_01)
+			.validates(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
+			.validatesNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
+			.validates(ValidationType.NOT_NULL, FIELD_LAST_UPDATE_TIMESTAMP)
 			.build();
 
 		assertEquals(OPERATION_FIND_BY_ID, result.getOperation(), "Error adding operation type");
@@ -74,10 +74,10 @@ class VerifyTest {
 
 		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
 			.ofClass(EntityExample.class)
-			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
-			.validateEquals(FIELD_LOCKED, true)
-			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
-			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
+			.validatesEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validatesEquals(FIELD_LOCKED, true)
+			.validatesEquals(FIELD_MONTH, MONTH_VALUE_01)
+			.validatesNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
 			.build();
 
 		assertEquals(OPERATION_FIND_BY_ID, result.getOperation(), "Error adding operation type");
@@ -90,11 +90,11 @@ class VerifyTest {
 
 		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
 			.ofClass(EntityExample.class)
-			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
-			.validateEquals(FIELD_LOCKED, true)
-			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
-			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
-			.validateEquals(FIELD_LAST_UPDATE_TIMESTAMP, DATE_NOW)
+			.validatesEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validatesEquals(FIELD_LOCKED, true)
+			.validatesEquals(FIELD_MONTH, MONTH_VALUE_01)
+			.validatesNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
+			.validatesEquals(FIELD_LAST_UPDATE_TIMESTAMP, DATE_NOW)
 			.build();
 
 		final List<ValidateField> validateFields = result.getFields();
@@ -143,7 +143,7 @@ class VerifyTest {
 
 		this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
 			.ofClass(EntityExample.class)
-			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validatesEquals(DEFAULT_KEY_ID, ID_FIELD)
 			.addVerificationMode(times(INTEGER_ONE))
 			.run(this.mongoTemplate);
 
@@ -164,8 +164,8 @@ class VerifyTest {
 			.allowSerializeNulls(false)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
-			.validateJson(entityExample)
-			.validate(ValidationType.JSON, entityExample)
+			.validatesJson(entityExample)
+			.validates(ValidationType.JSON, entityExample)
 			.build();
 
 		assertFalse(result.isAllowNulls());
@@ -201,14 +201,14 @@ class VerifyTest {
 			.allowSerializeNulls(true)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
-			.validateJson(entityExample)
-			.validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
-			.validate(ValidationType.JSON_BY_KEY, ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
-			.validateNull(NULLABLE_VALUE_FIELD)
-			.validateNotNull(DEFAULT_KEY_ID)
-			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
-			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
-			.validate(ValidationType.COLLECTION_SIZE, ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
+			.validatesJson(entityExample)
+			.validatesJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
+			.validates(ValidationType.JSON_BY_KEY, ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
+			.validatesNull(NULLABLE_VALUE_FIELD)
+			.validatesNotNull(DEFAULT_KEY_ID)
+			.validatesEquals(DEFAULT_KEY_ID, entityExample.getId())
+			.validatesCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
+			.validates(ValidationType.COLLECTION_SIZE, ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
 			.run(this.mongoTemplate);
 	}
 
@@ -229,12 +229,12 @@ class VerifyTest {
 			.allowSerializeNulls(true)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
-			.validateJson(entityExample)
-			.validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
-			.validateNull(NULLABLE_VALUE_FIELD)
-			.validateNotNull(DEFAULT_KEY_ID)
-			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
-			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
+			.validatesJson(entityExample)
+			.validatesJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
+			.validatesNull(NULLABLE_VALUE_FIELD)
+			.validatesNotNull(DEFAULT_KEY_ID)
+			.validatesEquals(DEFAULT_KEY_ID, entityExample.getId())
+			.validatesCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
 			.run(this.mongoTemplate);
 	}
 
@@ -257,8 +257,8 @@ class VerifyTest {
 			.thisOperation(Operation.FIND)
 			.addVerificationMode(times(INTEGER_ONE))
 			.ofClass(EntityExample.class)
-			.validateJsonByKey(ID_FIELD, expectedValue)
-			.validateJsonByKey(DELETED_FIELD, expectedValueOnDelete)
+			.validatesJsonByKey(ID_FIELD, expectedValue)
+			.validatesJsonByKey(DELETED_FIELD, expectedValueOnDelete)
 			.allowSerializeNulls(false)
 			.run(this.mongoTemplate);
 

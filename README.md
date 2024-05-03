@@ -61,23 +61,23 @@ we can validate that the fields sent to mongodb are the expected ones.
 ### Alternative validations 
 * There are the following types of validations
 
-|   Simplified Method    | ValidationType  |
-|:----------------------:|:---------------:|
-|     validateEquals     |     EQUALS      |
-|    validateNotNull     |    NOT_NULL     |
-|      validateNull      |      NULL       |
-| validateCollectionSize | COLLECTION_SIZE |
-|      validateJson      |      JSON       |
-|   validateJsonByKey    |   JSON_BY_KEY   |
+|    Simplified Method    | ValidationType  |
+|:-----------------------:|:---------------:|
+|     validatesEquals     |     EQUALS      |
+|    validatesNotNull     |    NOT_NULL     |
+|      validatesNull      |      NULL       |
+| validatesCollectionSize | COLLECTION_SIZE |
+|      validatesJson      |      JSON       |
+|   validatesJsonByKey    |   JSON_BY_KEY   |
 
 > NOTE: all this functions can be replaced by one single function with parameters, 
 > see [VerifyTest](./src/test/java/io/mongockito/VerifyTest.java) class for more examples
 
 ```java
     // use this
-    .validate(ValidationType.NULL, NULLABLE_FIELD_NAME)
+    .validates(ValidationType.NULL, NULLABLE_FIELD_NAME)
     // instead of him own method
-    .validateNull(NULLABLE_FIELD_NAME)
+    .validatesNull(NULLABLE_FIELD_NAME)
 ```
 
 
@@ -106,11 +106,11 @@ and will check that the attached fields have been sent to the DB as intended.
     Verify.that()
         .thisOperation( Operation.SAVE )
         .ofClass( EntityExample.class )
-        .validateEquals( "_Id", ID_FIELD )
-        .validateEquals( "boolean_field", true )
-        .validateEquals( "string_field", "name" )
-        .validateNull( "one_field" )
-        .validateNotNull( "another_field" )
+        .validatesEquals( "_Id", ID_FIELD )
+        .validatesEquals( "boolean_field", true )
+        .validatesEquals( "string_field", "name" )
+        .validatesNull( "one_field" )
+        .validatesNotNull( "another_field" )
         .run( <mongoTemplate> );
 
 ```
@@ -137,7 +137,7 @@ and will check that the attached fields have been sent to the DB as intended.
     Verify.that()
         .thisOperation( Operation.SAVE )
         .ofClass( EntityExample.class )
-        .validateJson( EntityExample.class,  entityExample )
+        .validatesJson( EntityExample.class,  entityExample )
         .addVerificationMode(times(INTEGER_ONE))
         .run( <mongoTemplate> );
 	
@@ -166,12 +166,12 @@ and will check that the attached fields have been sent to the DB as intended.
         .thisOperation( Operation.SAVE )
         .ofClass( EntityExample.class )
         .fromCollection( "document_collection_example_name" ) // instead of use @Document in Entity Bean
-        .validateJson(entityExample)
-        .validateJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
-        .validateNull(NULLABLE_VALUE_FIELD)
-        .validateNotNull(DEFAULT_KEY_ID)
-        .validateEquals(DEFAULT_KEY_ID, entityExample.getId())
-        .validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
+        .validatesJson(entityExample)
+        .validatesJsonByKey(ENTITY_EXAMPLE_MAP, entityExample.getEntityExampleMap())
+        .validatesNull(NULLABLE_VALUE_FIELD)
+        .validatesNotNull(DEFAULT_KEY_ID)
+        .validatesEquals(DEFAULT_KEY_ID, entityExample.getId())
+        .validatesCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
         .run( <mongoTemplate> );
 	
 ```
