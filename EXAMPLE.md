@@ -71,6 +71,16 @@ public class MongoRepository {
 
 * All tests necessary to validate these operations.
 
+|   Simplified Method    | ValidationType  |
+|:----------------------:|:---------------:|
+|     validateEquals     |     EQUALS      |
+|    validateNotNull     |    NOT_NULL     |
+|      validateNull      |      NULL       |
+| validateCollectionSize | COLLECTION_SIZE |
+|      validateJson      |      JSON       |
+|   validateJsonByKey    |   JSON_BY_KEY   |
+
+
 ```java
 import io.mongockito.ValidationType;
 import org.junit.jupiter.api.Test;
@@ -93,11 +103,11 @@ class MongoRepositoryTest {
     
         this.sut.findById( ID_FIELD );
     
-        Verify.builder()
-            .addMongoOperation( Operation.FIND_ONE )
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD )
-            .verify( this.mongoTemplate );
+        Verify.that()
+            .thisOperation( Operation.FIND_ONE )
+            .ofClass( MyEntity.class )
+            .validateEquals( DEFAULT_KEY_ID, ID_FIELD )
+            .run( this.mongoTemplate );
     
     }
 
@@ -106,11 +116,11 @@ class MongoRepositoryTest {
     
         this.sut.findByFooCode( null );
         
-        assertThatThrownBy(() -> Verify.builder()
-            .addMongoOperation( Operation.FIND_ONE )
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.NOT_NULL, DEFAULT_KEY_ID )
-            .verify( this.mongoTemplate ))
+        assertThatThrownBy(() -> Verify.that()
+            .thisOperation( Operation.FIND_ONE )
+            .ofClass( MyEntity.class )
+            .validateNotNull( DEFAULT_KEY_ID )
+            .run( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
     
     }
@@ -118,7 +128,7 @@ class MongoRepositoryTest {
     @Test
     void should_save_item_in_my_collection_correctly() {
     
-        MyEntity myEntity = MyEntity.builder()
+        MyEntity myEntity = MyEntity.that()
             .id( ID_FIELD )
             .fooCode( "bar" )
             .description( "lore ipsum" )
@@ -127,12 +137,12 @@ class MongoRepositoryTest {
     
         this.sut.save( myEntity );
     
-        Verify.builder()
-            .addMongoOperation(Operation.SAVE)
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.JSON, myEntity )
-            .addValidation( ValidationType.EQUALS, "active", true )
-            .verify( this.mongoTemplate );
+        Verify.that()
+            .thisOperation(Operation.SAVE)
+            .ofClass( MyEntity.class )
+            .validateJson( myEntity )
+            .validateEquals( "active", true )
+            .run( this.mongoTemplate );
     
     }
 
@@ -148,13 +158,13 @@ class MongoRepositoryTest {
         
         this.sut.save( myEntity );
         
-        Verify.builder()
-            .addMongoOperation(Operation.SAVE)
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.EQUALS, "fooCode", "bar" )
-            .addValidation( ValidationType.NOT_NULL, "desc" )
-            .addValidation( ValidationType.EQUALS, "active", true )
-            .verify( this.mongoTemplate );
+        Verify.that()
+            .thisOperation(Operation.SAVE)
+            .ofClass( MyEntity.class )
+            .validateEquals( "fooCode", "bar" )
+            .validateNotNull( "desc" )
+            .validateEquals( "active", true )
+            .run( this.mongoTemplate );
     
     }
 
@@ -171,12 +181,12 @@ class MongoRepositoryTest {
         
         this.sut.save(myEntity);
         
-        assertThatThrownBy(() -> Verify.builder()
-            .addMongoOperation(Operation.SAVE)
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.EQUALS, "active", false )
+        assertThatThrownBy(() -> Verify.that()
+            .thisOperation(Operation.SAVE)
+            .ofClass( MyEntity.class )
+            .validateEquals( "active", false )
             .addVerificationMode(times(INTEGER_ONE))
-            .verify( this.mongoTemplate ))
+            .run( this.mongoTemplate ))
         .isInstanceOf(AssertionError.class);
 
     }
@@ -202,12 +212,12 @@ class MongoRepositoryTest {
     
         this.sut.save( myEntity );
     
-        Verify.builder()
-            .addMongoOperation(Operation.SAVE)
-            .addClass( MyEntity.class )
-            .addValidation( ValidationType.JSON, myEntity )
+        Verify.that()
+            .thisOperation(Operation.SAVE)
+            .ofClass( MyEntity.class )
+            .validateJson( myEntity )
             .addAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
-            .verify( this.mongoTemplate );
+            .run( this.mongoTemplate );
     
     }
 ```

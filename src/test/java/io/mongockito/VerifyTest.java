@@ -54,11 +54,11 @@ class VerifyTest {
 	@Test
 	void should_create_a_build_object_with_correct_operation_and_class() {
 
-		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
-			.addClass(EntityExample.class)
-			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
-			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
-			.addValidation(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
+		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
+			.ofClass(EntityExample.class)
+			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validateEquals(FIELD_LOCKED, true)
+			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
 			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
 			.build();
 
@@ -70,8 +70,8 @@ class VerifyTest {
 	@Test
 	void should_create_a_build_object_with_correct_operation_and_class_using_validate_equals_method() {
 
-		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
-			.addClass(EntityExample.class)
+		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
+			.ofClass(EntityExample.class)
 			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
 			.validateEquals(FIELD_LOCKED, true)
 			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
@@ -86,13 +86,13 @@ class VerifyTest {
 	@Test
 	void should_create_a_build_object_with_correct_validations() {
 
-		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
-			.addClass(EntityExample.class)
-			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
-			.addValidation(ValidationType.EQUALS, FIELD_LOCKED, true)
-			.addValidation(ValidationType.EQUALS, FIELD_MONTH, MONTH_VALUE_01)
+		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
+			.ofClass(EntityExample.class)
+			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
+			.validateEquals(FIELD_LOCKED, true)
+			.validateEquals(FIELD_MONTH, MONTH_VALUE_01)
 			.validateNotNull(FIELD_LAST_UPDATE_TIMESTAMP)
-			.addValidation(ValidationType.EQUALS, FIELD_LAST_UPDATE_TIMESTAMP, DATE_NOW)
+			.validateEquals(FIELD_LAST_UPDATE_TIMESTAMP, DATE_NOW)
 			.build();
 
 		final List<ValidateField> validateFields = result.getFields();
@@ -125,8 +125,8 @@ class VerifyTest {
 
 		final VerificationMode verificationMode = times(INTEGER_TWO);
 
-		final Verify result = this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
-			.addClass(EntityExample.class)
+		final Verify result = this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
+			.ofClass(EntityExample.class)
 			.addVerificationMode(verificationMode)
 			.build();
 
@@ -139,11 +139,11 @@ class VerifyTest {
 
 		this.mongoTemplate.findById(ID_FIELD, EntityExample.class);
 
-		this.operationBuilder.addOperation(OPERATION_FIND_BY_ID)
-			.addClass(EntityExample.class)
-			.addValidation(ValidationType.EQUALS, DEFAULT_KEY_ID, ID_FIELD)
+		this.operationBuilder.thisOperation(OPERATION_FIND_BY_ID)
+			.ofClass(EntityExample.class)
+			.validateEquals(DEFAULT_KEY_ID, ID_FIELD)
 			.addVerificationMode(times(INTEGER_ONE))
-			.verify(this.mongoTemplate);
+			.run(this.mongoTemplate);
 
 	}
 
@@ -157,8 +157,8 @@ class VerifyTest {
 		this.mongoTemplate.save(entityExample);
 
 		final Verify result = this.operationBuilder
-			.addOperation(SAVE)
-			.addClass(EntityExample.class)
+			.thisOperation(SAVE)
+			.ofClass(EntityExample.class)
 			.allowSerializeNulls(false)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
@@ -192,9 +192,9 @@ class VerifyTest {
 
 		this.mongoTemplate.save(entityExample);
 
-		Verify.builder()
-			.addOperation(SAVE)
-			.addClass(EntityExample.class)
+		Verify.that()
+			.thisOperation(SAVE)
+			.ofClass(EntityExample.class)
 			.allowSerializeNulls(true)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
@@ -204,7 +204,7 @@ class VerifyTest {
 			.validateNotNull(DEFAULT_KEY_ID)
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
 			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
-			.verify(this.mongoTemplate);
+			.run(this.mongoTemplate);
 	}
 
 
@@ -217,10 +217,10 @@ class VerifyTest {
 
 		this.mongoTemplate.save(entityExample, EXAMPLE_COLLECTION_NAME);
 
-		Verify.builder()
-			.addOperation(SAVE)
-			.addClass(EntityExample.class)
-			.addCollectionName(EXAMPLE_COLLECTION_NAME)
+		Verify.that()
+			.thisOperation(SAVE)
+			.ofClass(EntityExample.class)
+			.fromCollection(EXAMPLE_COLLECTION_NAME)
 			.allowSerializeNulls(true)
 			.addAdapter(ObjectId.class, objectIdAdapter)
 			.addAdapter(LocalDateTime.class, localDateTimeAdapter)
@@ -230,7 +230,7 @@ class VerifyTest {
 			.validateNotNull(DEFAULT_KEY_ID)
 			.validateEquals(DEFAULT_KEY_ID, entityExample.getId())
 			.validateCollectionSize(ENTITY_EXAMPLE_LIST, entityExample.getEntityExampleList().size())
-			.verify(this.mongoTemplate);
+			.run(this.mongoTemplate);
 	}
 
 	@Test
@@ -248,14 +248,14 @@ class VerifyTest {
 
 		this.mongoTemplate.find(query, EntityExample.class);
 
-		Verify.builder()
-			.addOperation(Operation.FIND)
+		Verify.that()
+			.thisOperation(Operation.FIND)
 			.addVerificationMode(times(INTEGER_ONE))
-			.addClass(EntityExample.class)
+			.ofClass(EntityExample.class)
 			.validateJsonByKey(ID_FIELD, expectedValue)
 			.validateJsonByKey(DELETED_FIELD, expectedValueOnDelete)
 			.allowSerializeNulls(false)
-			.verify(this.mongoTemplate);
+			.run(this.mongoTemplate);
 
 	}
 

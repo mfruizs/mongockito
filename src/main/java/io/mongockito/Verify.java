@@ -56,7 +56,7 @@ public class Verify {
 		this.collectionName = builder.collectionName;
 	}
 
-	public static OperationBuilder builder() {
+	public static OperationBuilder that() {
 
 		return new OperationBuilder();
 	}
@@ -81,7 +81,7 @@ public class Verify {
 			return new Verify(this);
 		}
 
-		public OperationBuilder addOperation(final Operation operation) {
+		public OperationBuilder thisOperation(final Operation operation) {
 
 			assertNotNull(operation, MANDATORY_OPERATION);
 
@@ -89,7 +89,7 @@ public class Verify {
 			return this;
 		}
 
-		public OperationBuilder addClass(final Class<?> clazz) {
+		public OperationBuilder ofClass(final Class<?> clazz) {
 
 			assertNotNull(clazz, MANDATORY_CLASS);
 
@@ -97,7 +97,7 @@ public class Verify {
 			return this;
 		}
 
-		public OperationBuilder addCollectionName(final String collectionName) {
+		public OperationBuilder fromCollection(final String collectionName) {
 
 			assertNotNull(collectionName, MANDATORY_FIELD_COLLECTION_NAME);
 
@@ -159,16 +159,6 @@ public class Verify {
 			return this.addValidation(ValidationType.JSON_BY_KEY, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K, V> OperationBuilder addValidation(final ValidationType validationType,
-													 final K fieldName,
-													 final V expectedValue) {
-
-			assertNotNull(validationType, MANDATORY_VALIDATION_TYPE);
-			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
-
-			return this.addValidation(validationType, Pair.of(fieldName, expectedValue));
-		}
-
 		private <K> OperationBuilder addValidation(final ValidationType type, final K fieldName) {
 
 			assertNotNull(type, MANDATORY_VALIDATION_TYPE);
@@ -203,7 +193,7 @@ public class Verify {
 			return this;
 		}
 
-		public void verify(final MongoTemplate mongoTemplate) {
+		public void run(final MongoTemplate mongoTemplate) {
 
 			this.validateAndCompleteBuilder(mongoTemplate);
 
