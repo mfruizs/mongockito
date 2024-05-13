@@ -20,7 +20,7 @@ we can validate that the fields sent to mongodb are the expected ones.
     <dependency>
         <groupId>io.mongockito</groupId>
         <artifactId>mongockito</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>${mongockito.version}</version>
         <scope>test</scope>
     </dependency>
 ```
