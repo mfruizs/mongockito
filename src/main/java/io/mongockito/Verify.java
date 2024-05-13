@@ -3,7 +3,9 @@ package io.mongockito;
 import static io.micrometer.common.util.StringUtils.isNotBlank;
 import static lombok.AccessLevel.PRIVATE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
+import static org.apache.commons.lang3.math.NumberUtils.INTEGER_TWO;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.times;
 
 import io.mongockito.model.ValidateField;
@@ -36,6 +38,7 @@ public class Verify {
 	private static final String MANDATORY_FIELD_EXPECTED_VALUE = "mandatory field: expectedValue";
 	private static final String MANDATORY_FIELD_VERIFICATION_MODE = "mandatory field: Verification Mode";
 	private static final String MANDATORY_FIELD_COLLECTION_NAME = "mandatory field: CollectionCame";
+	public static final String TOO_MANY_PARAMETERS = "Too many parameters";
 
 	Operation operation;
 	Class<?> clazz;
@@ -56,7 +59,7 @@ public class Verify {
 		this.collectionName = builder.collectionName;
 	}
 
-	public static OperationBuilder builder() {
+	public static OperationBuilder that() {
 
 		return new OperationBuilder();
 	}
@@ -81,7 +84,7 @@ public class Verify {
 			return new Verify(this);
 		}
 
-		public OperationBuilder addOperation(final Operation operation) {
+		public OperationBuilder thisOperation(final Operation operation) {
 
 			assertNotNull(operation, MANDATORY_OPERATION);
 
@@ -89,7 +92,7 @@ public class Verify {
 			return this;
 		}
 
-		public OperationBuilder addClass(final Class<?> clazz) {
+		public OperationBuilder ofClass(final Class<?> clazz) {
 
 			assertNotNull(clazz, MANDATORY_CLASS);
 
@@ -97,7 +100,7 @@ public class Verify {
 			return this;
 		}
 
-		public OperationBuilder addCollectionName(final String collectionName) {
+		public OperationBuilder fromCollection(final String collectionName) {
 
 			assertNotNull(collectionName, MANDATORY_FIELD_COLLECTION_NAME);
 
@@ -113,30 +116,30 @@ public class Verify {
 			return this;
 		}
 
-		public <K, V> OperationBuilder validateEquals(final K fieldName,
-													 final V expectedValue) {
+		public <K, V> OperationBuilder validatesEquals(final K fieldName,
+													   final V expectedValue) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.EQUALS, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K> OperationBuilder validateNull(final K fieldName) {
+		public <K> OperationBuilder validatesNull(final K fieldName) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.NULL, fieldName);
 		}
 
-		public <K> OperationBuilder validateNotNull(final K fieldName) {
+		public <K> OperationBuilder validatesNotNull(final K fieldName) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 
 			return this.addValidation(ValidationType.NOT_NULL, fieldName);
 		}
 
-		public <K, V> OperationBuilder validateCollectionSize(final K fieldName,
-															  final V expectedSize) {
+		public <K, V> OperationBuilder validatesCollectionSize(final K fieldName,
+															   final V expectedSize) {
 
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedSize, MANDATORY_EXPECTED_SIZE);
@@ -144,29 +147,32 @@ public class Verify {
 			return this.addValidation(ValidationType.COLLECTION_SIZE, Pair.of(fieldName, expectedSize));
 		}
 
-		public <K> OperationBuilder validateJson(final K expectedValue) {
+		public <K> OperationBuilder validatesJson(final K expectedValue) {
 
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON, expectedValue);
 		}
 
-		public <K, V> OperationBuilder validateJsonByKey(final K fieldName,
-													  final V expectedValue) {
+		public <K, V> OperationBuilder validatesJsonByKey(final K fieldName,
+														  final V expectedValue) {
 			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
 			assertNotNull(expectedValue, MANDATORY_FIELD_EXPECTED_VALUE);
 
 			return this.addValidation(ValidationType.JSON_BY_KEY, Pair.of(fieldName, expectedValue));
 		}
 
-		public <K, V> OperationBuilder addValidation(final ValidationType validationType,
-													 final K fieldName,
-													 final V expectedValue) {
+		public OperationBuilder validates(final ValidationType validationType, Object... values) {
 
-			assertNotNull(validationType, MANDATORY_VALIDATION_TYPE);
-			assertNotNull(fieldName, MANDATORY_FIELD_NAME);
+			assertNotNull(values, MANDATORY_FIELD_NAME);
+			assertTrue(values.length <= INTEGER_TWO, TOO_MANY_PARAMETERS);
 
-			return this.addValidation(validationType, Pair.of(fieldName, expectedValue));
+
+			if (values.length == INTEGER_ONE) {
+				return this.addValidation(validationType, Pair.of(values[0], null));
+			}
+
+			return this.addValidation(validationType, Pair.of(values[0], values[1]));
 		}
 
 		private <K> OperationBuilder addValidation(final ValidationType type, final K fieldName) {
@@ -203,7 +209,7 @@ public class Verify {
 			return this;
 		}
 
-		public void verify(final MongoTemplate mongoTemplate) {
+		public void run(final MongoTemplate mongoTemplate) {
 
 			this.validateAndCompleteBuilder(mongoTemplate);
 
