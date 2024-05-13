@@ -29,9 +29,10 @@ we can validate that the fields sent to mongodb are the expected ones.
 
 * [Mongockito release packages](https://github.com/mfruizs/mongockito/packages)
 
-| Release      | Date     | Information   |
-|:-------------|----------|---------------|
-| 1.0-SNAPSHOT | 2-may-24 | First release |
+| Release      | Date      | Information                 |
+|:-------------|-----------|-----------------------------|
+| 1.0-SNAPSHOT | 2-may-24  | First release               |
+| 2.0-SNAPSHOT | 13-may-24 | refactoring builder methods |
 
 ## Validations
 
