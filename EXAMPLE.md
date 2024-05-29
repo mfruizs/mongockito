@@ -128,7 +128,7 @@ class MongoRepositoryTest {
     @Test
     void should_save_item_in_my_collection_correctly() {
     
-        MyEntity myEntity = MyEntity.that()
+        MyEntity myEntity = MyEntity.builder()
             .id( ID_FIELD )
             .fooCode( "bar" )
             .description( "lore ipsum" )
